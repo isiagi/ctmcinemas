@@ -7,7 +7,7 @@ export default function ComingSoon() {
         <div className="flex justify-center">
           <Film className="h-20 w-20 text-red-500" />
         </div>
-        <h1 className="text-4xl font-bold">CTMCinemas</h1>
+        <h1 className="text-4xl font-bold">EMTCinemas</h1>
         <h2 className="text-2xl font-semibold">Coming Soon</h2>
         <p className="text-gray-300">
           We&apos;re working hard to bring you the ultimate cinema experience.
