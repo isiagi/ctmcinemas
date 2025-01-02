@@ -9,39 +9,42 @@ const movies = [
   {
     title: "Nosferatu",
     image:
-      "https://images.unsplash.com/photo-1729277789546-27ea8b64c0e9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2M3x8fGVufDB8fHx8fA%3D%3D",
+      "https://assets.voxcinemas.com/posters/P_HO00011813_1734505897702.jpg",
     description: "Succumb to the Darkness",
     size: "large",
   },
   {
     title: "Mufasa",
     image:
-      "https://images.unsplash.com/photo-1733468221794-dd3344c6015e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2N3x8fGVufDB8fHx8fA%3D%3D",
+      "https://assets.voxcinemas.com/posters/P_HO00011415_1734002132521.jpg",
     description: "The Lion King Returns",
     size: "small",
   },
   {
     title: "Sonic 3",
-    image: "/api/placeholder/400/300",
+    image:
+      "https://assets.voxcinemas.com/posters/P_HO00011450_1724997905981.jpg",
     description: "Speed has no limits",
     size: "small",
   },
   {
     title: "Marco",
     image:
-      "https://images.unsplash.com/photo-1727452274228-4fa1c56142db?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1NXx8fGVufDB8fHx8fA%3D%3D",
+      "https://assets.voxcinemas.com/posters/P_HO00011837_1735283944255.jpg",
     description: "A journey begins",
     size: "small",
   },
   {
     title: "Identity",
-    image: "/api/placeholder/400/300",
+    image:
+      "https://assets.voxcinemas.com/posters/P_HO00011817_1734505836119.jpg",
     description: "Who can you trust?",
     size: "small",
   },
   {
     title: "The Last Stand",
-    image: "/api/placeholder/800/600",
+    image:
+      "https://assets.voxcinemas.com/posters/P_HO00011201_1724765243551.jpg",
     description: "One final battle",
     size: "large",
   },
