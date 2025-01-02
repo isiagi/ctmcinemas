@@ -7,19 +7,19 @@ import { Button } from "@/components/ui/button"
 
 const slides = [
   {
-    image: '/placeholder.svg?height=600&width=1200&text=Movie+1',
+    image: '/placeholder.svg?height=400&width=1200&text=Movie+1',
     alt: 'Movie 1',
     title: 'Blockbuster Hit',
     description: 'Experience the action-packed adventure of the year!',
   },
   {
-    image: '/placeholder.svg?height=600&width=1200&text=Movie+2',
+    image: '/placeholder.svg?height=400&width=1200&text=Movie+2',
     alt: 'Movie 2',
     title: 'Romantic Comedy',
     description: 'Fall in love with the most heartwarming story of the season.',
   },
   {
-    image: '/placeholder.svg?height=600&width=1200&text=Movie+3',
+    image: '/placeholder.svg?height=400&width=1200&text=Movie+3',
     alt: 'Movie 3',
     title: 'Sci-Fi Thriller',
     description: 'Journey to the unknown in this mind-bending space odyssey.',
@@ -43,7 +43,7 @@ export function Carousel() {
   }, [])
 
   return (
-    <div className="relative h-[600px] w-full overflow-hidden">
+    <div className="relative h-[400px] w-full overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -54,13 +54,13 @@ export function Carousel() {
           <Image
             src={slide.image}
             alt={slide.alt}
-            layout="fill"
-            objectFit="cover"
+            fill
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="text-center text-white">
-              <h2 className="text-4xl font-bold mb-4">{slide.title}</h2>
-              <p className="text-xl mb-8">{slide.description}</p>
+              <h2 className="text-3xl font-bold mb-4">{slide.title}</h2>
+              <p className="text-lg mb-8">{slide.description}</p>
               <Button size="lg">Book Now</Button>
             </div>
           </div>
