@@ -3,193 +3,116 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 
 const movies = [
   {
     title: "Nosferatu",
-    image: "/placeholder.svg?height=800&width=400&text=Nosferatu",
+    image:
+      "https://images.unsplash.com/photo-1729277789546-27ea8b64c0e9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2M3x8fGVufDB8fHx8fA%3D%3D",
     description: "Succumb to the Darkness",
-    highlight: "Now Showing",
+    size: "large",
   },
   {
-    title: "Mufasa: The Lion King",
-    image: "/placeholder.svg?height=400&width=600&text=Mufasa",
-    description: "The story of an orphan who would be king",
-    highlight: "Exclusive Preview",
+    title: "Mufasa",
+    image:
+      "https://images.unsplash.com/photo-1733468221794-dd3344c6015e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2N3x8fGVufDB8fHx8fA%3D%3D",
+    description: "The Lion King Returns",
+    size: "small",
   },
   {
     title: "Sonic 3",
-    image: "/placeholder.svg?height=400&width=300&text=Sonic",
+    image: "/api/placeholder/400/300",
     description: "Speed has no limits",
-    highlight: "Coming Soon",
+    size: "small",
   },
   {
     title: "Marco",
-    image: "/placeholder.svg?height=400&width=300&text=Marco",
-    description: "Every hero has a dark side",
-    highlight: "Book Now",
+    image:
+      "https://images.unsplash.com/photo-1727452274228-4fa1c56142db?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1NXx8fGVufDB8fHx8fA%3D%3D",
+    description: "A journey begins",
+    size: "small",
   },
   {
     title: "Identity",
-    image: "/placeholder.svg?height=400&width=300&text=Identity",
+    image: "/api/placeholder/400/300",
     description: "Who can you trust?",
-    highlight: "Final Week",
+    size: "small",
   },
   {
     title: "The Last Stand",
-    image: "/placeholder.svg?height=300&width=300&text=LastStand",
-    description: "One final battle awaits",
-    highlight: "Coming Soon",
+    image: "/api/placeholder/800/600",
+    description: "One final battle",
+    size: "large",
+  },
+  {
+    title: "The Last Stand",
+    image: "/api/placeholder/800/600",
+    description: "One final battle",
+    size: "large",
   },
 ];
 
 export function WhatsOn() {
-  const router = useRouter();
+  const [showAll, setShowAll] = useState(false);
+  const displayedMovies = showAll ? movies : movies.slice(0, 6);
 
   return (
     <section className="bg-black">
-      <div className="max-w-[1400px] mx-auto py-16 px-4 md:px-16">
-        <h2 className="text-3xl font-bold mb-8 text-center text-white">
+      <div className="max-w-7xl mx-auto py-16">
+        <h2 className="text-3xl font-bold mb-8 text-center text-white px-4">
           What's On
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 h-[1000px]">
-          {/* Large left section */}
-          <div className="relative md:col-span-1 md:row-span-2 bg-gray-900">
-            <Image
-              src={movies[0].image}
-              alt={movies[0].title}
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/90 p-8 flex flex-col justify-end">
-              <span className="text-cyan-400 text-sm font-medium mb-2">
-                {movies[0].highlight}
-              </span>
-              <h3 className="text-4xl font-bold text-white mb-2">
-                {movies[0].title}
-              </h3>
-              <p className="text-gray-300 mb-4">{movies[0].description}</p>
-              <Button
-                variant="outline"
-                className="w-full md:w-auto text-white border-white hover:bg-white hover:text-black"
-              >
-                Book Now
-              </Button>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[450px] gap-4 p-4 mx-4 lg:mx-10">
+          {displayedMovies.map((movie, index) => {
+            const gridClass =
+              movie.size === "large"
+                ? "col-span-1 sm:col-span-2 row-span-1"
+                : "col-span-1 row-span-1";
 
-          {/* Top right section */}
-          <div className="relative md:col-span-2 md:row-span-1 bg-purple-900">
-            <Image
-              src={movies[1].image}
-              alt={movies[1].title}
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-purple-900/90 p-6 flex flex-col justify-end">
-              <span className="text-pink-400 text-sm font-medium mb-2">
-                {movies[1].highlight}
-              </span>
-              <h3 className="text-2xl font-bold text-white mb-2">
-                {movies[1].title}
-              </h3>
-              <p className="text-gray-300">{movies[1].description}</p>
-            </div>
-          </div>
-
-          {/* Bottom right grid */}
-          <div className="grid grid-cols-2 md:col-span-2 md:row-span-1 h-full">
-            {/* Sonic 3 - Taller */}
-            <div className="relative bg-blue-900 row-span-3">
-              <Image
-                src={movies[2].image}
-                alt={movies[2].title}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-blue-900/90 p-4 flex flex-col justify-end">
-                <span className="text-cyan-400 text-xs font-medium mb-1">
-                  {movies[2].highlight}
-                </span>
-                <h3 className="text-xl font-bold text-white mb-1">
-                  {movies[2].title}
-                </h3>
-                <p className="text-gray-300 text-sm">{movies[2].description}</p>
+            return (
+              <div key={index} className={`relative ${gridClass}`}>
+                <Image
+                  src={movie.image}
+                  alt={movie.title}
+                  fill
+                  className="object-cover"
+                  priority={index === 0}
+                />
+                <div className="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4 text-center">
+                    <h3 className="text-xl font-bold mb-2">{movie.title}</h3>
+                    <p className="mb-4 text-sm line-clamp-2">
+                      {movie.description}
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-white border-white hover:bg-white hover:text-black"
+                    >
+                      Book Now
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            {/* Marco - Regular height */}
-            <div className="relative bg-red-900">
-              <Image
-                src={movies[3].image}
-                alt={movies[3].title}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-red-900/90 p-4 flex flex-col justify-end">
-                <span className="text-red-400 text-xs font-medium mb-1">
-                  {movies[3].highlight}
-                </span>
-                <h3 className="text-lg font-bold text-white mb-1">
-                  {movies[3].title}
-                </h3>
-                <p className="text-gray-300 text-sm">{movies[3].description}</p>
-              </div>
-            </div>
-
-            {/* Identity - Regular height */}
-            <div className="relative bg-indigo-900">
-              <Image
-                src={movies[4].image}
-                alt={movies[4].title}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-indigo-900/90 p-4 flex flex-col justify-end">
-                <span className="text-indigo-400 text-xs font-medium mb-1">
-                  {movies[4].highlight}
-                </span>
-                <h3 className="text-lg font-bold text-white mb-1">
-                  {movies[4].title}
-                </h3>
-                <p className="text-gray-300 text-sm">{movies[4].description}</p>
-              </div>
-            </div>
-
-            {/* The Last Stand */}
-            <div className="relative bg-green-900">
-              <Image
-                src={movies[5].image}
-                alt={movies[5].title}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-green-900/90 p-4 flex flex-col justify-end">
-                <span className="text-green-400 text-xs font-medium mb-1">
-                  {movies[5].highlight}
-                </span>
-                <h3 className="text-lg font-bold text-white mb-1">
-                  {movies[5].title}
-                </h3>
-                <p className="text-gray-300 text-sm">{movies[5].description}</p>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
 
-        <div className="text-center mt-8">
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => router.push("/movies")}
-            className="text-white border-white hover:bg-white hover:text-black"
-          >
-            View All Movies
-          </Button>
-        </div>
+        {!showAll && movies.length > 6 && (
+          <div className="text-center mt-8">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => setShowAll(true)}
+              className="gap-2 text-white border-white hover:bg-white hover:text-black"
+            >
+              Load More Movies
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
