@@ -3,7 +3,14 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+type Movie = {
+  title: string;
+  image: string;
+  description: string;
+  size: "large" | "small";
+};
 
 const movies = [
   {
@@ -59,6 +66,7 @@ const movies = [
 export function WhatsOn() {
   const [showAll, setShowAll] = useState(false);
   const displayedMovies = showAll ? movies : movies.slice(0, 6);
+  const router = useRouter();
 
   return (
     <section className="bg-black">
@@ -103,19 +111,16 @@ export function WhatsOn() {
           })}
         </div>
 
-        {!showAll && movies.length > 6 && (
-          <div className="text-center mt-8">
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => setShowAll(true)}
-              className="gap-2 text-white border-white hover:bg-white hover:text-black"
-            >
-              Load More Movies
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
+        <div className="text-center mt-8">
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => router.push("/movies")}
+            className="text-white border-white hover:bg-white hover:text-black"
+          >
+            View All Movies
+          </Button>
+        </div>
       </div>
     </section>
   );
