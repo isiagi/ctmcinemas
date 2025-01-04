@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useRouter } from 'next/navigation'
 
 interface MovieShowtimesProps {
   movie: MovieDetails | null
@@ -18,12 +19,17 @@ interface MovieShowtimesProps {
 
 export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
   const [selectedDay, setSelectedDay] = useState<string | null>(movie?.days[0]?.date || null)
+  const router = useRouter()
 
   if (!movie) {
     return <div className="text-center py-8">Loading movie details...</div>
   }
 
   const selectedDayData = movie.days.find(day => day.date === selectedDay)
+
+  const handleBookNow = (showtime: string) => {
+    router.push(`/movies/${movie.id}/book?date=${selectedDay}&time=${showtime}`)
+  }
 
   return (
     <div className="w-full">
@@ -104,7 +110,7 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">{showtime.type}</span>
-                  <Button size="sm">Book Now</Button>
+                  <Button size="sm" onClick={() => handleBookNow(showtime.time)}>Book Now</Button>
                 </div>
               </div>
             ))}

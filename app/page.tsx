@@ -1,5 +1,5 @@
-import { Carousel } from "@/components/Carousel";
-import { WhatsOn } from "@/components/WhatsOn";
+import { Carousel } from './components/Carousel'
+import { WhatsOn } from './components/WhatsOn'
 
 export default function Home() {
   return (
@@ -7,5 +7,6 @@ export default function Home() {
       <Carousel />
       <WhatsOn />
     </main>
-  );
+  )
 }
+

@@ -1,55 +1,54 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Button } from "@/components/ui/button"
 
 const slides = [
   {
-    image: "https://assets.voxcinemas.com/content/VOX-MufasaCTA_1733808692.jpg",
-    alt: "Movie 1",
-    title: "Blockbuster Hit",
-    description: "Experience the action-packed adventure of the year!",
+    image: '/placeholder.svg?height=400&width=1200&text=Movie+1',
+    alt: 'Movie 1',
+    title: 'Blockbuster Hit',
+    description: 'Experience the action-packed adventure of the year!',
   },
   {
-    image:
-      "https://assets.voxcinemas.com/content/Sonic-MP-SHARE--_1735197591.jpg",
-    alt: "Movie 2",
-    title: "Romantic Comedy",
-    description: "Fall in love with the most heartwarming story of the season.",
+    image: '/placeholder.svg?height=400&width=1200&text=Movie+2',
+    alt: 'Movie 2',
+    title: 'Romantic Comedy',
+    description: 'Fall in love with the most heartwarming story of the season.',
   },
   {
-    image: "https://assets.voxcinemas.com/content/Marco_1735722489.jpg",
-    alt: "Movie 3",
-    title: "Sci-Fi Thriller",
-    description: "Journey to the unknown in this mind-bending space odyssey.",
+    image: '/placeholder.svg?height=400&width=1200&text=Movie+3',
+    alt: 'Movie 3',
+    title: 'Sci-Fi Thriller',
+    description: 'Journey to the unknown in this mind-bending space odyssey.',
   },
-];
+]
 
 export function Carousel() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0)
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
+    setCurrentSlide((prev) => (prev + 1) % slides.length)
+  }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+  }
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000);
-    return () => clearInterval(timer);
-  }, []);
+    const timer = setInterval(nextSlide, 5000)
+    return () => clearInterval(timer)
+  }, [])
 
   return (
-    <div className="relative h-[450px] w-full overflow-hidden">
+    <div className="relative h-[400px] w-full overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={index}
           className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${
-            index === currentSlide ? "opacity-100" : "opacity-0"
+            index === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
         >
           <Image
@@ -84,5 +83,6 @@ export function Carousel() {
         <ChevronRight size={24} />
       </Button>
     </div>
-  );
+  )
 }
+
