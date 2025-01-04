@@ -5,12 +5,17 @@ async function getMovieData(id: string): Promise<MovieDetails | null> {
   // This would typically be an API call. For now, we'll return mock data.
   return {
     id: id,
-    title: "Arthur The King",
+    title: "Nosferatu",
     duration: "105 min",
     language: "English",
     rating: "PG-13",
-    description: "Based on a true story, a Swedish adventure racer adopts a stray dog named Arthur who joins him on an epic journey through the Ecuadorian jungle.",
+    description: "In this haunting reimagining of F.W. Murnau's classic 1922 silent film.",
+    longDescription: "A chilling tale of horror and suspense.",
     bannerImage: "/placeholder.svg?height=400&width=1200",
+    trailerUrl: "https://www.youtube.com/watch?v=ZSXDIraujMk",
+    director: "Robert Eggers",
+    cast: ["Lily-Rose Depp", "Bill Skarsgård", "Nicholas Hoult", "Willem Dafoe"],
+    genre: ["Horror", "Drama", "Fantasy"],
     days: [
       {
         date: "2025-01-02",
@@ -19,8 +24,6 @@ async function getMovieData(id: string): Promise<MovieDetails | null> {
           { time: "10:30", type: "Standard", price: "$12" },
           { time: "13:45", type: "Standard", price: "$12" },
           { time: "16:15", type: "Standard", price: "$12" },
-          { time: "19:00", type: "Standard", price: "$15" },
-          { time: "21:30", type: "Standard", price: "$15" },
         ]
       },
       {
@@ -30,10 +33,8 @@ async function getMovieData(id: string): Promise<MovieDetails | null> {
           { time: "11:00", type: "Standard", price: "$15" },
           { time: "14:15", type: "Standard", price: "$15" },
           { time: "16:45", type: "Standard", price: "$15" },
-          { time: "19:30", type: "Standard", price: "$18" },
-          { time: "22:00", type: "Standard", price: "$18" },
         ]
-      },
+      }
     ]
   }
 }

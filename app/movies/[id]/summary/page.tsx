@@ -28,9 +28,10 @@ export default function BookingSummaryPage() {
   const seats = searchParams.get('seats')?.split(',') || []
   const date = searchParams.get('date')
   const time = searchParams.get('time')
+  const movieId = searchParams.get('id')
 
   const handleEditSeats = () => {
-    router.back()
+    router.push(`/movies/${movieId}/book?date=${date}&time=${time}&seats=${seats.join(',')}`)
   }
 
   return (

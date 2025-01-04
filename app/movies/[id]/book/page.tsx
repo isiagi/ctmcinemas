@@ -1,40 +1,73 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 
+interface Seat {
+  id: string
+  row: string
+  number: number
+  status: 'available' | 'booked' | 'selected'
+  price: number
+}
+
 // This would typically come from an API
-const generateSeats = () => {
+const generateSeats = (selectedSeats: string[]): Seat[] => {
   const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
   const seatsPerRow = 10
   return rows.flatMap(row => 
-    Array.from({ length: seatsPerRow }, (_, i) => ({
-      id: `${row}${i + 1}`,
-      row,
-      number: i + 1,
-      isAvailable: Math.random() > 0.2, // 80% of seats are available
-      price: 10.00 // Fixed price for simplicity
-    }))
+    Array.from({ length: seatsPerRow }, (_, i) => {
+      const seatId = `${row}${i + 1}`
+      let status: 'available' | 'booked' | 'selected' = 'available'
+      if (selectedSeats.includes(seatId)) {
+        status = 'selected'
+      } else if (Math.random() > 0.8) { // 20% chance of being booked
+        status = 'booked'
+      }
+      return {
+        id: seatId,
+        row,
+        number: i + 1,
+        status,
+        price: 10.00 // Fixed price for simplicity
+      }
+    })
   )
 }
 
 export default function BookPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [seats, setSeats] = useState(generateSeats())
+  const [seats, setSeats] = useState<Seat[]>([])
   const [selectedSeats, setSelectedSeats] = useState<string[]>([])
 
   const movieId = searchParams.get('id')
   const date = searchParams.get('date')
   const time = searchParams.get('time')
+  const initialSelectedSeats = searchParams.get('seats')?.split(',') || []
+
+  useEffect(() => {
+    const generatedSeats = generateSeats(initialSelectedSeats)
+    setSeats(generatedSeats)
+    setSelectedSeats(initialSelectedSeats)
+  }, [])
 
   const toggleSeat = (seatId: string) => {
-    setSelectedSeats(prev => 
-      prev.includes(seatId) 
-        ? prev.filter(id => id !== seatId)
-        : [...prev, seatId]
-    )
+    const seat = seats.find(s => s.id === seatId)
+    if (seat && seat.status !== 'booked') {
+      const updatedSeats = seats.map(s => 
+        s.id === seatId 
+          ? { ...s, status: s.status === 'selected' ? 'available' : 'selected' }
+          : s
+      )
+      setSeats(updatedSeats)
+      setSelectedSeats(prev => 
+        prev.includes(seatId) 
+          ? prev.filter(id => id !== seatId)
+          : [...prev, seatId]
+      )
+    }
   }
 
   const handleReserve = () => {
@@ -56,14 +89,14 @@ export default function BookPage() {
             <button
               key={seat.id}
               className={`w-8 h-8 rounded-md text-sm font-bold ${
-                !seat.isAvailable 
-                  ? 'bg-gray-300 cursor-not-allowed' 
-                  : selectedSeats.includes(seat.id)
+                seat.status === 'booked'
+                  ? 'bg-gray-300 cursor-not-allowed'
+                  : seat.status === 'selected'
                     ? 'bg-green-500 text-white'
                     : 'bg-blue-500 text-white hover:bg-blue-600'
               }`}
-              onClick={() => seat.isAvailable && toggleSeat(seat.id)}
-              disabled={!seat.isAvailable}
+              onClick={() => toggleSeat(seat.id)}
+              disabled={seat.status === 'booked'}
             >
               {seat.row}{seat.number}
             </button>
@@ -83,6 +116,21 @@ export default function BookPage() {
         >
           Reserve Seat{selectedSeats.length > 1 ? 's' : ''}
         </Button>
+      </div>
+
+      <div className="flex justify-center space-x-4">
+        <div className="flex items-center">
+          <div className="w-4 h-4 bg-blue-500 rounded-sm mr-2"></div>
+          <span>Available</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 bg-green-500 rounded-sm mr-2"></div>
+          <span>Selected</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 bg-gray-300 rounded-sm mr-2"></div>
+          <span>Booked</span>
+        </div>
       </div>
     </div>
   )

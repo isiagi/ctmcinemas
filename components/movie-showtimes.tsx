@@ -1,17 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { ChevronRight, Info } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { ChevronRight, Play, Calendar, Clock } from 'lucide-react'
 import { MovieDetails, MovieDay } from '@/types/movie'
 import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import dynamic from 'next/dynamic'
+
+const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false })
 
 interface MovieShowtimesProps {
   movie: MovieDetails | null
@@ -19,7 +15,16 @@ interface MovieShowtimesProps {
 
 export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
   const [selectedDay, setSelectedDay] = useState<string | null>(movie?.days[0]?.date || null)
+  const [showTrailer, setShowTrailer] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const showtimesRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (searchParams.get('scrollToShowtimes') === 'true') {
+      scrollToShowtimes()
+    }
+  }, [searchParams])
 
   if (!movie) {
     return <div className="text-center py-8">Loading movie details...</div>
@@ -31,8 +36,12 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
     router.push(`/movies/${movie.id}/book?date=${selectedDay}&time=${showtime}`)
   }
 
+  const scrollToShowtimes = () => {
+    showtimesRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
-    <div className="w-full">
+    <div className="w-full bg-gray-100">
       {/* Banner Section */}
       <div className="relative h-[400px] w-full">
         <div className="absolute inset-0">
@@ -49,9 +58,9 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
             <span className="px-2 py-1 bg-white/20 rounded">{movie.language}</span>
             <span>{movie.duration}</span>
             <span>{movie.rating}</span>
-            <Button variant="ghost" size="sm" className="text-white">
-              <Info className="h-4 w-4 mr-2" />
-              More Info
+            <Button variant="ghost" size="sm" className="text-white" onClick={() => setShowTrailer(true)}>
+              <Play className="h-4 w-4 mr-2" />
+              Watch Trailer
             </Button>
           </div>
         </div>
@@ -59,64 +68,94 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold">VIEW TIMES AND BOOK</h2>
-          <Select defaultValue="recommended">
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="recommended">Recommended</SelectItem>
-              <SelectItem value="time">Time</SelectItem>
-              <SelectItem value="price">Price</SelectItem>
-            </SelectContent>
-          </Select>
+        {/* Movie Details */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">About the Movie</h2>
+          <p className="text-gray-700 mb-4">{movie.description}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <h3 className="font-semibold">Director</h3>
+              <p>{movie.director}</p>
+            </div>
+            <div>
+              <h3 className="font-semibold">Cast</h3>
+              <p>{movie.cast.slice(0, 2).join(', ')}{movie.cast.length > 2 ? '...' : ''}</p>
+            </div>
+            <div>
+              <h3 className="font-semibold">Genre</h3>
+              <p>{movie.genre.join(', ')}</p>
+            </div>
+            <div>
+              <h3 className="font-semibold">Release Date</h3>
+              <p>{movie.days[0].date}</p>
+            </div>
+          </div>
         </div>
 
-        {/* Date Navigation */}
-        <div className="flex space-x-4 overflow-x-auto pb-4 mb-8">
-          {movie.days.map((day) => (
-            <Button
-              key={day.date}
-              variant={selectedDay === day.date ? "default" : "outline"}
-              onClick={() => setSelectedDay(day.date)}
-              className="min-w-[120px]"
-            >
-              {day.displayDate}
-            </Button>
-          ))}
-          <Button variant="ghost" className="min-w-[120px]">
-            More dates
-            <ChevronRight className="h-4 w-4 ml-2" />
+        {/* Scroll to Showtimes Button */}
+        <div className="text-center mb-8">
+          <Button onClick={scrollToShowtimes}>
+            <Calendar className="mr-2 h-4 w-4" /> View Showtimes
           </Button>
         </div>
 
-        {/* Movie Description */}
-        <p className="text-gray-600 mb-8">
-          {movie.description}
-        </p>
-
         {/* Showtimes */}
-        {selectedDayData && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {selectedDayData.showtimes.map((showtime, index) => (
-              <div
-                key={index}
-                className="p-4 border rounded-lg bg-white hover:shadow-md transition-shadow"
+        <div ref={showtimesRef}>
+          <h2 className="text-2xl font-bold mb-4">Showtimes</h2>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {movie.days.map((day) => (
+              <Button
+                key={day.date}
+                variant={selectedDay === day.date ? "default" : "outline"}
+                onClick={() => setSelectedDay(day.date)}
               >
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-lg font-semibold">{showtime.time}</span>
-                  <span className="text-gray-600">{showtime.price}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">{showtime.type}</span>
-                  <Button size="sm" onClick={() => handleBookNow(showtime.time)}>Book Now</Button>
-                </div>
-              </div>
+                {day.displayDate}
+              </Button>
             ))}
           </div>
-        )}
+          {selectedDayData && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {selectedDayData.showtimes.map((showtime, index) => (
+                <div
+                  key={index}
+                  className="p-4 border rounded-lg bg-white hover:shadow-md transition-shadow"
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-lg font-semibold">{showtime.time}</span>
+                    <span className="text-gray-600">{showtime.price}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">{showtime.type}</span>
+                    <Button size="sm" onClick={() => handleBookNow(showtime.time)}>
+                      <Clock className="mr-2 h-4 w-4" /> Book Now
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Trailer Modal */}
+      {showTrailer && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="w-full max-w-3xl">
+            <ReactPlayer
+              url={movie.trailerUrl}
+              width="100%"
+              height="auto"
+              controls
+            />
+            <Button 
+              className="mt-4" 
+              onClick={() => setShowTrailer(false)}
+            >
+              Close Trailer
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
