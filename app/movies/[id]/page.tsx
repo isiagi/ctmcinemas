@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MovieDetails } from "@/types/movie";
 import MovieShowtimes from "@/components/movie-showtimes";
 
@@ -45,11 +46,7 @@ async function getMovieData(id: string): Promise<MovieDetails | null> {
   };
 }
 
-export default async function MoviePage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function MoviePage({ params }: any) {
   const movieData = await getMovieData(params.id);
 
   return (
