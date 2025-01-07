@@ -5,12 +5,12 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
-type Movie = {
-  title: string;
-  image: string;
-  description: string;
-  size: "large" | "small";
-};
+// type Movie = {
+//   title: string;
+//   image: string;
+//   description: string;
+//   size: "large" | "small";
+// };
 
 const movies = [
   {
@@ -64,6 +64,7 @@ const movies = [
 ];
 
 export function WhatsOn() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showAll, setShowAll] = useState(false);
   const displayedMovies = showAll ? movies : movies.slice(0, 6);
   const router = useRouter();
@@ -72,7 +73,7 @@ export function WhatsOn() {
     <section className="bg-black">
       <div className="max-w-7xl mx-auto py-16">
         <h2 className="text-3xl font-bold mb-8 text-center text-white px-4">
-          What's On
+          What&apos;s On
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[450px] gap-4 p-4 mx-4 lg:mx-10">
