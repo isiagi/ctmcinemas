@@ -12,7 +12,7 @@ async function getMovieData(id: string): Promise<MovieDetails | null> {
     description:
       "In this haunting reimagining of F.W. Murnau's classic 1922 silent film.",
     longDescription: "A chilling tale of horror and suspense.",
-    bannerImage: "/placeholder.svg?height=400&width=1200",
+    bannerImage: "https://assets.voxcinemas.com/content/Marco_1735722489.jpg",
     trailerUrl: "https://www.youtube.com/watch?v=ZSXDIraujMk",
     director: "Robert Eggers",
     cast: [
