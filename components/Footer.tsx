@@ -81,7 +81,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2 text-sm">
                 <MapPin className="h-4 w-4" />
-                123 Movie Street, Cinema City
+                123 Makerere Hill, Ham Towers
               </li>
             </ul>
           </div>
