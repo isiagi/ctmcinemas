@@ -77,7 +77,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2 text-sm">
                 <Mail className="h-4 w-4" />
-                info@cinemahub.com
+                info@emtcinemas.com
               </li>
               <li className="flex items-center gap-2 text-sm">
                 <MapPin className="h-4 w-4" />

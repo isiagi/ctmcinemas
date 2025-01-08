@@ -58,7 +58,7 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
         </div>
         <div className="absolute bottom-0 left-0 p-8">
           <h1 className="text-4xl font-bold text-white mb-2">{movie.title}</h1>
-          <div className="flex items-center space-x-4 text-white">
+          <div className="flex items-center space-x-4 text-white flex-wrap gap-2">
             <span className="px-2 py-1 bg-white/20 rounded">
               {movie.language}
             </span>
@@ -165,7 +165,7 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
             <ReactPlayer
               url={movie.trailerUrl}
               width="100%"
-              height="auto"
+              height="390px"
               controls
             />
             <Button className="mt-4" onClick={() => setShowTrailer(false)}>

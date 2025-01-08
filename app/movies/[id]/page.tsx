@@ -14,7 +14,7 @@ async function getMovieData(id: string): Promise<MovieDetails | null> {
       "In this haunting reimagining of F.W. Murnau's classic 1922 silent film.",
     longDescription: "A chilling tale of horror and suspense.",
     bannerImage: "https://assets.voxcinemas.com/content/Marco_1735722489.jpg",
-    trailerUrl: "https://www.youtube.com/watch?v=ZSXDIraujMk",
+    trailerUrl: "https://www.youtube.com/watch?v=o17MF9vnabg",
     director: "Robert Eggers",
     cast: [
       "Lily-Rose Depp",
