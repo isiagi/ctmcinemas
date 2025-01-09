@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MovieDetails } from "@/types/movie";
 import MovieShowtimes from "@/components/movie-showtimes";
 
@@ -13,8 +12,8 @@ async function getMovieData(id: string): Promise<MovieDetails | null> {
     description:
       "In this haunting reimagining of F.W. Murnau's classic 1922 silent film.",
     longDescription: "A chilling tale of horror and suspense.",
-    bannerImage: "https://assets.voxcinemas.com/content/Marco_1735722489.jpg",
-    trailerUrl: "https://www.youtube.com/watch?v=o17MF9vnabg",
+    bannerImage: "/placeholder.svg?height=400&width=1200",
+    trailerUrl: "https://www.youtube.com/watch?v=ZSXDIraujMk",
     director: "Robert Eggers",
     cast: [
       "Lily-Rose Depp",
@@ -46,7 +45,11 @@ async function getMovieData(id: string): Promise<MovieDetails | null> {
   };
 }
 
-export default async function MoviePage({ params }: any) {
+export default async function MoviePage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const movieData = await getMovieData(params.id);
 
   return (

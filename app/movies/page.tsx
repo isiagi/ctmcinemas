@@ -1,52 +1,47 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Calendar, Eye } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import Image from "next/image"
+import { useRouter } from 'next/navigation'
+import { Calendar, Eye } from 'lucide-react'
 
 const allMovies = [
   {
     id: "nosferatu",
     title: "Nosferatu",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011813_1734505897702.jpg",
+    image: "/placeholder.svg?height=600&width=400&text=Nosferatu",
     description: "Succumb to the Darkness",
   },
   {
     id: "mufasa",
     title: "Mufasa: The Lion King",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011415_1734002132521.jpg",
+    image: "/placeholder.svg?height=600&width=400&text=Mufasa",
     description: "The story of an orphan who would be king",
   },
   {
     id: "sonic-3",
     title: "Sonic 3",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011450_1724997905981.jpg",
+    image: "/placeholder.svg?height=600&width=400&text=Sonic+3",
     description: "Speed has no limits",
-  },
-];
+  }
+]
 
 export default function MoviesPage() {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleViewMovie = (movieId: string) => {
-    router.push(`/movies/${movieId}`);
-  };
+    router.push(`/movies/${movieId}`)
+  }
 
   const handleViewShowtimes = (movieId: string) => {
-    router.push(`/movies/${movieId}?scrollToShowtimes=true`);
-  };
+    router.push(`/movies/${movieId}?scrollToShowtimes=true`)
+  }
 
   return (
     <div className="bg-black min-h-screen">
       <div className="max-w-[1400px] mx-auto py-16 px-4 md:px-16">
-        <h1 className="text-4xl font-bold mb-8 text-center text-white">
-          All Movies
-        </h1>
-
+        <h1 className="text-4xl font-bold mb-8 text-center text-white">All Movies</h1>
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {allMovies.map((movie) => (
             <div key={movie.id} className="relative aspect-[2/3] group">
@@ -61,18 +56,18 @@ export default function MoviesPage() {
                   <h2 className="text-2xl font-bold mb-2">{movie.title}</h2>
                   <p className="mb-6 text-lg">{movie.description}</p>
                   <div className="flex space-x-4">
-                    <Button
+                    <Button 
                       variant="outline"
-                      size="sm"
+                      size="sm" 
                       className="text-white border-white hover:bg-white hover:text-black"
                       onClick={() => handleViewMovie(movie.id)}
                     >
                       <Eye className="mr-2 h-4 w-4" />
                       View Movie
                     </Button>
-                    <Button
+                    <Button 
                       variant="outline"
-                      size="sm"
+                      size="sm" 
                       className="text-white border-white hover:bg-white hover:text-black"
                       onClick={() => handleViewShowtimes(movie.id)}
                     >
@@ -87,5 +82,6 @@ export default function MoviesPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
+

@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { auth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 interface Seat {
   id: string;
@@ -38,10 +39,17 @@ const generateSeats = (selectedSeats: string[]): Seat[] => {
   );
 };
 
-export default function BookPage() {
+export default async function BookPage() {
+  const { userId } = auth();
+
+  if (!userId) {
+    redirect(
+      "/sign-in?redirectUrl=" + encodeURIComponent(window.location.href)
+    );
+  }
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [seats, setSeats] = useState<any>([]);
+  const [seats, setSeats] = useState<Seat[]>([]);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
 
   const movieId = searchParams.get("id");
@@ -56,9 +64,9 @@ export default function BookPage() {
   }, []);
 
   const toggleSeat = (seatId: string) => {
-    const seat = seats.find((s: any) => s.id === seatId);
+    const seat = seats.find((s) => s.id === seatId);
     if (seat && seat.status !== "booked") {
-      const updatedSeats = seats.map((s: any) =>
+      const updatedSeats = seats.map((s) =>
         s.id === seatId
           ? { ...s, status: s.status === "selected" ? "available" : "selected" }
           : s
@@ -93,7 +101,7 @@ export default function BookPage() {
           Screen
         </div>
         <div className="grid grid-cols-10 gap-2">
-          {seats.map((seat: any) => (
+          {seats.map((seat) => (
             <button
               key={seat.id}
               className={`w-8 h-8 rounded-md text-sm font-bold ${
