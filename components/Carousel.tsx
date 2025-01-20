@@ -45,7 +45,7 @@ export function Carousel() {
   }, []);
 
   return (
-    <div className="relative h-[450px] w-full overflow-hidden">
+    <div className="relative h-[400px] w-full overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -54,7 +54,7 @@ export function Carousel() {
           }`}
         >
           <Image
-            src={slide.image}
+            src={slide.image || "/placeholder.svg"}
             alt={slide.alt}
             fill
             className="object-cover"

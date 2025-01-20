@@ -4,64 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
-// type Movie = {
-//   title: string;
-//   image: string;
-//   description: string;
-//   size: "large" | "small";
-// };
-
-const movies = [
-  {
-    title: "Nosferatu",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011813_1734505897702.jpg",
-    description: "Succumb to the Darkness",
-    size: "large",
-  },
-  {
-    title: "Mufasa",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011415_1734002132521.jpg",
-    description: "The Lion King Returns",
-    size: "small",
-  },
-  {
-    title: "Sonic 3",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011450_1724997905981.jpg",
-    description: "Speed has no limits",
-    size: "small",
-  },
-  {
-    title: "Marco",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011837_1735283944255.jpg",
-    description: "A journey begins",
-    size: "small",
-  },
-  {
-    title: "Identity",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011817_1734505836119.jpg",
-    description: "Who can you trust?",
-    size: "small",
-  },
-  {
-    title: "The Last Stand",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011201_1724765243551.jpg",
-    description: "One final battle",
-    size: "large",
-  },
-  {
-    title: "The Last Stand",
-    image: "/api/placeholder/800/600",
-    description: "One final battle",
-    size: "large",
-  },
-];
+import { movies } from "@/lib/movies";
 
 export function WhatsOn() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -71,9 +14,9 @@ export function WhatsOn() {
 
   return (
     <section className="bg-black">
-      <div className="max-w-7xl mx-auto py-16">
-        <h2 className="text-3xl font-bold mb-8 text-center text-white px-4">
-          What&apos;s On
+      <div className="max-w-[1400px] mx-auto py-16 px-4 md:px-16">
+        <h2 className="text-3xl font-bold mb-8 text-center text-white">
+          What's On
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[450px] gap-4 p-4 mx-4 lg:mx-10">
@@ -92,20 +35,20 @@ export function WhatsOn() {
                   className="object-cover"
                   priority={index === 0}
                 />
-                <div className="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4 text-center">
-                    <h3 className="text-xl font-bold mb-2">{movie.title}</h3>
-                    <p className="mb-4 text-sm line-clamp-2">
-                      {movie.description}
-                    </p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-white border-white hover:bg-white hover:text-black"
-                    >
-                      Book Now
-                    </Button>
-                  </div>
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/90 p-8 flex flex-col justify-end">
+                  <span className="text-cyan-400 text-sm font-medium mb-2">
+                    {movie.highlight}
+                  </span>
+                  <h3 className="text-4xl font-bold text-white mb-2">
+                    {movie.title}
+                  </h3>
+                  <p className="text-gray-300 mb-4">{movie.description}</p>
+                  <Button
+                    variant="outline"
+                    className="w-full md:w-auto text-white border-white hover:bg-white hover:text-black"
+                  >
+                    Book Now
+                  </Button>
                 </div>
               </div>
             );
