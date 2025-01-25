@@ -37,7 +37,7 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const showtimesRef = useRef<HTMLDivElement>(null);
-  const { isSignedIn } = useAuth();
+  // const { isSignedIn } = useAuth();
 
   useEffect(() => {
     if (searchParams.get("scrollToShowtimes") === "true") {
@@ -52,10 +52,10 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
   const selectedDayData = movie.days.find((day) => day.date === selectedDay);
 
   const handleBookNow = (showtime: string) => {
-    if (!isSignedIn) {
-      setShowAuthDialog(true);
-      return;
-    }
+    // if (!isSignedIn) {
+    //   setShowAuthDialog(true);
+    //   return;
+    // }
     router.push(
       `/movies/${movie.id}/book?date=${selectedDay}&time=${showtime}`
     );
@@ -113,7 +113,6 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
               <h3 className="font-semibold">Cast</h3>
               {/* actor: [ 'James Earl Jones', 'Jeremy Irons', 'Matthew Broderick' ], */}
               <p>{movie.actor.join(",")}</p>
-
             </div>
             <div>
               <h3 className="font-semibold">Genre</h3>

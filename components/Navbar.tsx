@@ -5,12 +5,12 @@ import Link from "next/link";
 import { Film, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MovieSearch from "./MovieSearch";
-import { UserButton, SignInButton, useUser } from "@clerk/nextjs";
+// import { UserButton, SignInButton, useUser } from "@clerk/nextjs";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isSignedIn, user } = useUser();
+  // const { isSignedIn, user } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,7 +60,7 @@ export default function Navbar() {
           </div>
           <div className="hidden md:flex items-center space-x-4">
             <MovieSearch />
-            {isSignedIn ? (
+            {/* {isSignedIn ? (
               <UserButton afterSignOutUrl="/" />
             ) : (
               <SignInButton mode="modal">
@@ -72,7 +72,7 @@ export default function Navbar() {
                   Sign In
                 </Button>
               </SignInButton>
-            )}
+            )} */}
           </div>
           <div className="-mr-2 flex md:hidden">
             <Button
@@ -115,7 +115,7 @@ export default function Navbar() {
           <div className="pt-4 pb-3 border-t border-gray-700">
             <div className="px-2 space-y-1">
               <MovieSearch />
-              {isSignedIn ? (
+              {/* {isSignedIn ? (
                 <div className="flex items-center px-3 py-2">
                   <span className="text-gray-300 text-sm mr-2">
                     Signed in as {user.firstName}
@@ -132,7 +132,7 @@ export default function Navbar() {
                     Sign In
                   </Button>
                 </SignInButton>
-              )}
+              )} */}
             </div>
           </div>
         </div>

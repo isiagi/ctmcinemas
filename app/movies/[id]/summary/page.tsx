@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Edit2, Film, Calendar, Clock, Info, Utensils } from "lucide-react";
 import Image from "next/image";
 import { movies } from "@/lib/movies";
+import { useAuth } from "@clerk/nextjs";
 // import { auth } from "@clerk/nextjs/server";
 
 interface MovieDetails {
@@ -47,6 +48,8 @@ export default function BookingSummaryPage() {
     type: "3D",
   });
   const [selectedEats, setSelectedEats] = useState<Record<string, number>>({});
+
+  const { userId } = useAuth();
 
   const seats = searchParams.get("seats")?.split(",") || [];
   const date = searchParams.get("date");
@@ -108,28 +111,28 @@ export default function BookingSummaryPage() {
 
   const handlePayment = async () => {
     try {
-      const response = await fetch("/api/createOrder", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          movieId,
-          date,
-          time,
-          seats,
-          eats: selectedEats,
-          totalPrice: calculateTotal(),
-        }),
-      });
-
-      if (response.ok) {
-        alert("Order created successfully!");
-        router.push("/orders");
-      } else {
-        alert("Failed to create order. Please try again.");
-      }
+      // console.log("Creating order...");
+      // const response = await fetch("/api/create-order", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     userId,
+      //     movieId,
+      //     date,
+      //     time,
+      //     seats,
+      //     eats: selectedEats,
+      //     totalPrice: 1000,
+      //   }),
+      // });
+      // if (response.ok) {
+      //   alert("Order created successfully!");
+      //   router.push("/orders");
+      // } else {
+      //   alert("Failed to create order. Please try again.");
+      // }
     } catch (error) {
       console.error("Error creating order:", error);
       alert("An error occurred. Please try again.");
