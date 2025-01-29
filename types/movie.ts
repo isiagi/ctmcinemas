@@ -24,5 +24,9 @@ export interface MovieDetails {
   cast: string[]
   genre: string[]
   days: MovieDay[]
+  actor: string[]
+  image: string
+  highlight: string[]
+  releaseDate: string
 }
 

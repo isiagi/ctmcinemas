@@ -1,16 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { movies } from "@/lib/movies";
+import axios from "axios";
 
 export function WhatsOn() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showAll, setShowAll] = useState(false);
+  const [movies, setMovies] = useState<any[]>([])
   const displayedMovies = showAll ? movies : movies.slice(0, 6);
   const router = useRouter();
+
+  const getMoviesFromAPI = async () => {
+    await axios.get('http://127.0.0.1:8000/movies/movies/').then((response) => {
+      setMovies(response.data);
+    }).catch((error) => {
+      setMovies([])
+      console.error("No movies found because of: ", error);
+    })
+  }
+
+  useEffect(() => {
+    getMoviesFromAPI();
+  }, [])
 
   return (
     <section className="bg-black">

@@ -7,9 +7,11 @@ from .views import (
     ForgotPasswordView,
     ResetPasswordView,
     VerifyEmailView,
+    LoginView
 )
 
 urlpatterns = [
+    path("login/", LoginView.as_view(), name="login"),
     path("profile/", UserProfileView.as_view(), name="user-profile"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("create-account/", CreateAccountView.as_view(), name="create-account"),

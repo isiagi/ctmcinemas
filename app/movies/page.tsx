@@ -4,11 +4,14 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Calendar, Eye } from "lucide-react";
-import { movies } from "@/lib/movies";
+// import { movies } from "@/lib/movies";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 
 export default function MoviesPage() {
   const router = useRouter();
+  const[movies, setMovies] = useState<any[]>([]);
 
   const handleViewMovie = (movieId: string) => {
     router.push(`/movies/${movieId}`);
@@ -18,6 +21,19 @@ export default function MoviesPage() {
     router.push(`/movies/${movieId}?scrollToShowtimes=true`);
   };
 
+  const getMoviesFromAPI = async () => {
+    await axios.get('http://127.0.0.1:8000/movies/movies/').then((response) => {
+      setMovies(response.data);
+    }).catch((error) => {
+      setMovies([])
+      console.error("No movies found because of: ", error);
+    })
+  }
+
+  useEffect(() => {
+    getMoviesFromAPI()
+  }, [])
+
   return (
     <div className="bg-black min-h-screen">
       <div className="max-w-[1400px] mx-auto py-16 px-4 md:px-16">
@@ -25,6 +41,7 @@ export default function MoviesPage() {
           All Movies
         </h1>
 
+        <span>ndjio</span>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {movies.map((movie: any) => (
             <div key={movie.id} className="relative aspect-[2/3] group">

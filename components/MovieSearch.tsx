@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { movies } from "@/lib/movies";
+import axios from "axios";
 
 // const allMovies = [
 //   "The Shawshank Redemption",
@@ -23,17 +24,24 @@ import { movies } from "@/lib/movies";
 export default function MovieSearch() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredMovies, setFilteredMovies] = useState<string[]>([]);
-  const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
+  const [filteredMovies, setFilteredMovies] = useState<any[]>([]);
+  const [selectedMovies, setSelectedMovies] = useState<any[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [allMovies, setAllMovies] = useState<String[]>()
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // filter movies titles from movies to create allMovies
   useEffect(() => {
-    const movieTitles = movies.map(movie => movie.title);
+    const getAllMovies = () => {
+      axios.get('http://127.0.0.1:8000/movies/movies/').then((response) => {
+        const movieTitles = response.data.map((movie: any) => movie.title);
+        setAllMovies(movieTitles);
+      }).catch(() => {
+        setAllMovies([])
+      })
+    }
     // set allmovies
-    setAllMovies(movieTitles);
+    getAllMovies();
   }, []);
 
 
