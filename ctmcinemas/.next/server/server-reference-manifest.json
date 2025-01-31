@@ -1,0 +1,144 @@
+{
+  "node": {
+    "7f123976803de507e6431dd147f824756b4f07ee3c": {
+      "workers": {
+        "app/movies/[id]/summary/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/_not-found/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/[id]/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/[id]/book/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/[id]/eats/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/comingsoon/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/movies/[id]/summary/page": "action-browser",
+        "app/_not-found/page": "action-browser",
+        "app/page": "action-browser",
+        "app/movies/page": "action-browser",
+        "app/movies/[id]/page": "action-browser",
+        "app/movies/[id]/book/page": "action-browser",
+        "app/movies/[id]/eats/page": "action-browser",
+        "app/comingsoon/page": "action-browser"
+      }
+    },
+    "7fcba1881f89ea2c58111e797bbf8cd79406064cc4": {
+      "workers": {
+        "app/movies/[id]/summary/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/_not-found/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/[id]/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/[id]/book/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/[id]/eats/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/comingsoon/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/movies/[id]/summary/page": "action-browser",
+        "app/_not-found/page": "action-browser",
+        "app/page": "action-browser",
+        "app/movies/page": "action-browser",
+        "app/movies/[id]/page": "action-browser",
+        "app/movies/[id]/book/page": "action-browser",
+        "app/movies/[id]/eats/page": "action-browser",
+        "app/comingsoon/page": "action-browser"
+      }
+    },
+    "7f9b14a4097b59f4e585f2faddccb092ceab1dd053": {
+      "workers": {
+        "app/movies/[id]/summary/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/_not-found/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/[id]/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/[id]/book/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/movies/[id]/eats/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/comingsoon/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%5B%227f123976803de507e6431dd147f824756b4f07ee3c%22%2C%22syncKeylessConfigAction%22%5D%2C%5B%227fcba1881f89ea2c58111e797bbf8cd79406064cc4%22%2C%22createOrReadKeylessAction%22%5D%5D%5D%2C%5B%22%2Fhome%2Fcodecan%2FDocuments%2Fprogramming%20gigs%2Fgeofrey%2Fctmcinemas%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%5B%227f9b14a4097b59f4e585f2faddccb092ceab1dd053%22%2C%22invalidateCacheAction%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/movies/[id]/summary/page": "action-browser",
+        "app/_not-found/page": "action-browser",
+        "app/page": "action-browser",
+        "app/movies/page": "action-browser",
+        "app/movies/[id]/page": "action-browser",
+        "app/movies/[id]/book/page": "action-browser",
+        "app/movies/[id]/eats/page": "action-browser",
+        "app/comingsoon/page": "action-browser"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "TyNwkAMDmPz23XCJyiIjxpUu1JXa4ixbhziPxIWPGro="
+}
