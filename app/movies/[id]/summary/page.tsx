@@ -99,7 +99,7 @@ export default function BookingSummaryPage() {
     const config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "http://127.0.0.1:8000/auth/profile/",
+      url: "https://cinema-vmbf.onrender.com/auth/profile/",
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
@@ -188,13 +188,17 @@ export default function BookingSummaryPage() {
 
       console.log(payload, "payload");
 
-      await axios.post("http://127.0.0.1:8000/orders/orders/", payload, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      await axios.post(
+        "https://cinema-vmbf.onrender.com/orders/orders/",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
 
       setColor("#62a03f");
       setBgColor("#111827");

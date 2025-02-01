@@ -109,6 +109,9 @@ export default function Navbar() {
       window.localStorage.removeItem("refresh_token");
       setTokens({ access_token: null, refresh_token: null });
 
+      // Redirect to login page
+      window.location.href = "/";
+
       // Clear user state and close dropdown
       setUser({});
       setIsDropdownOpen(false);
@@ -118,7 +121,7 @@ export default function Navbar() {
       setPopupMessage("Logout successful");
     } catch (error: any) {
       setUser({});
-      console.error("Logout failed", error.response?.data);
+      console.log("Logout failed", error.response?.data);
     }
   };
 

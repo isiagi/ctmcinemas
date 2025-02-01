@@ -16,7 +16,7 @@ export function Footer() {
           {/* About Section */}
           <div>
             <h3 className="text-white text-lg font-semibold mb-4">
-              About CinemaHub
+              About EMT CINEMAS
             </h3>
             <p className="text-sm">
               Experience the magic of movies in state-of-the-art theaters. Your
@@ -30,6 +30,22 @@ export function Footer() {
               Quick Links
             </h3>
             <ul className="space-y-2">
+              {/* <li>
+                <Link
+                  href="/"
+                  className="text-sm hover:text-white transition-colors"
+                >
+                  Home
+                </Link>
+              </li> */}
+              <li>
+                <Link
+                  href="/movies"
+                  className="text-sm hover:text-white transition-colors"
+                >
+                  All Movies
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/whatson"
@@ -48,20 +64,20 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/eats"
+                  href="/services"
                   className="text-sm hover:text-white transition-colors"
                 >
-                  Eats
+                  Services
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="/membership"
                   className="text-sm hover:text-white transition-colors"
                 >
                   Membership
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -73,7 +89,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm">
                 <Phone className="h-4 w-4" />
-                (123) 456-7890
+                0200916821 /
               </li>
               <li className="flex items-center gap-2 text-sm">
                 <Mail className="h-4 w-4" />
@@ -91,19 +107,19 @@ export function Footer() {
             <h3 className="text-white text-lg font-semibold mb-4">Follow Us</h3>
             <div className="flex space-x-4">
               <Link
-                href="https://facebook.com"
+                href="https://www.facebook.com/profile.php?id=61568398119994&mibextid=ZbWKwL"
                 className="hover:text-white transition-colors"
               >
                 <Facebook />
               </Link>
               <Link
-                href="https://instagram.com"
+                href="https://www.instagram.com/emtcinemas?igsh=MWdnaDd0MXF5bGcwZQ=="
                 className="hover:text-white transition-colors"
               >
                 <Instagram />
               </Link>
               <Link
-                href="https://twitter.com"
+                href="https://x.com/emtcinemas?t=lAI3J827gaZbDJt_am74vA&s=09"
                 className="hover:text-white transition-colors"
               >
                 <Twitter />
