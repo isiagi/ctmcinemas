@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Film, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MovieSearch from "./MovieSearch";
-import { UserButton } from "@clerk/nextjs";
 import AuthModal from "./signinup";
 import axios from "axios";
 import PopupMessage from "./popup";
@@ -14,24 +13,38 @@ import PopupMessage from "./popup";
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  // const { isSignedIn, user } = useUser();
   const [user, setUser] = useState<any>({});
   const [openUp, setOpenUp] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [color, setColor] = useState<string>("");
   const [bgColor, setBgColor] = useState<string>("");
   const [popupMessage, setPopupMessage] = useState("");
-  // const access_token = localStorage.getItem("access_token");
-  // const refresh_token = localStorage.getItem("refresh_token");
+  const [tokens, setTokens] = useState<{
+    access_token: string | null;
+    refresh_token: string | null;
+  }>({
+    access_token: null,
+    refresh_token: null,
+  });
+
+  // Initialize tokens from localStorage after component mounts
+  useEffect(() => {
+    setTokens({
+      access_token: window.localStorage.getItem("access_token"),
+      refresh_token: window.localStorage.getItem("refresh_token"),
+    });
+  }, []);
 
   useEffect(() => {
     const getUserProfile = () => {
+      if (!tokens.access_token) return;
+
       const config = {
         method: "get",
         maxBodyLength: Infinity,
         url: "http://127.0.0.1:8000/auth/profile/",
         headers: {
-          Authorization: `Bearer hghgjg`,
+          Authorization: `Bearer ${tokens.access_token}`,
         },
       };
 
@@ -42,45 +55,47 @@ export default function Navbar() {
         })
         .catch((error) => {
           setUser({});
-          console.log(error.response.data);
+          console.log(error.response?.data);
         });
     };
 
-    getUserProfile();
+    if (tokens.access_token) {
+      getUserProfile();
+    }
 
     const handleScroll = () => {
-      // Get banner height (400px) plus any additional spacing
       const bannerHeight = 400;
       setIsScrolled(window.scrollY > bannerHeight);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [tokens.access_token]);
 
   const handleLogout = async () => {
-    // if (!refresh_token) {
-    //   setColor("red-800");
-    //   setBgColor("red-200");
-    //   setPopupMessage("No refresh token found.");
-    //   return;
-    // }
+    if (!tokens.refresh_token) {
+      setColor("red-800");
+      setBgColor("red-200");
+      setPopupMessage("No refresh token found.");
+      return;
+    }
 
     try {
       await axios.post(
         "http://127.0.0.1:8000/auth/logout/",
         {},
         {
-          // headers: {
-          //   refresh: refresh_token,
-          //   access: access_token,
-          // },
+          headers: {
+            refresh: tokens.refresh_token,
+            access: tokens.access_token,
+          },
         }
       );
 
-      // Clear tokens from local storage
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
+      // Clear tokens from local storage and state
+      window.localStorage.removeItem("access_token");
+      window.localStorage.removeItem("refresh_token");
+      setTokens({ access_token: null, refresh_token: null });
 
       // Clear user state and close dropdown
       setUser({});
@@ -138,10 +153,9 @@ export default function Navbar() {
                   className="text-black text-sm mr-2 border bg-gray-400 rounded-full w-11 h-11 flex justify-center items-center font-extrabold"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  {user.name.slice(0, 3)}
+                  {user.name?.slice(0, 3)}
                 </Button>
 
-                {/* Dropdown Menu */}
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-lg border z-50">
                     <div className="p-3 border-b">
@@ -221,7 +235,6 @@ export default function Navbar() {
                   <span className="text-gray-300 text-sm mr-2">
                     Signed in as {user.name}
                   </span>
-                  <UserButton afterSignOutUrl="/" />
                 </div>
               ) : (
                 <Button
