@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prefer-const */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import axios from "axios"; // Make sure to import axios
 
 interface Seat {
   id: string;
@@ -13,16 +16,10 @@ interface Seat {
   price: number;
 }
 
-interface Showtime {
-  time: string;
-  type: string;
-  price: string;
-}
-
-// Generate seats based on the updated arrangement
-const generateSeats = (price: number) => {
+// Generate seats based on the specific arrangement and price
+const generateSeats = (basePrice: number = 10.0) => {
   const rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-  const seats: Seat[] = [];
+  let seats: any = [];
 
   rows.forEach((row, rowIndex) => {
     if (rowIndex === 0) {
@@ -34,20 +31,20 @@ const generateSeats = (price: number) => {
             id: `${row}${seatNumber}`,
             row,
             number: seatNumber,
-            isAvailable: Math.random() > 0.2, // 80% chance of being available
-            price: price,
+            isAvailable: true, // 80% chance of being available
+            price: basePrice * 1.2, // Slightly higher price for the first row
           });
         }
       }
     } else if (rowIndex < 8) {
-      // Rows B-H: 10 seats
-      for (let seatNumber = 1; seatNumber <= 10; seatNumber++) {
+      // Rows B-H: 3 pairs of seats + 1 single seat (7 total)
+      for (let seatNumber = 1; seatNumber <= 7; seatNumber++) {
         seats.push({
           id: `${row}${seatNumber}`,
           row,
           number: seatNumber,
-          isAvailable: Math.random() > 0.2,
-          price: price,
+          isAvailable: true,
+          price: basePrice,
         });
       }
     } else {
@@ -57,8 +54,8 @@ const generateSeats = (price: number) => {
           id: `${row}${seatNumber}`,
           row,
           number: seatNumber,
-          isAvailable: seatNumber === 4 ? false : Math.random() > 0.2,
-          price: price,
+          isAvailable: true,
+          price: basePrice,
         });
       }
     }
@@ -71,39 +68,16 @@ export default function BookPage() {
   const searchParams = useSearchParams();
   const params = useParams();
   const router = useRouter();
-  const [seats, setSeats] = useState<Seat[]>([]);
+  const [seats, setSeats] = useState(generateSeats());
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-  const [showtime, setShowtime] = useState<Showtime | null>(null);
 
-  const movieId = params.id;
+  const movieId = params.id as string;
   const date = searchParams.get("date");
   const time = searchParams.get("time");
-  const editSeats = searchParams.get("editSeats");
-
-  useEffect(() => {
-    
-    // Fetch showtime data (this would typically be an API call)
-    const fetchedShowtime: Showtime = {
-      time: time || "",
-      type: "3D",
-      price: "10000", // Example price
-    };
-    setShowtime(fetchedShowtime);
-
-    // Generate seats based on the fetched price
-    const generatedSeats = generateSeats(
-      Number.parseInt(fetchedShowtime.price)
-    );
-    setSeats(generatedSeats);
-
-    // If editing seats, set the selected seats
-    if (editSeats) {
-      setSelectedSeats(editSeats.split(","));
-    }
-  }, [time, editSeats]);
+  const editSeats = searchParams.get("seats"); // Add this to get existing seats
 
   const toggleSeat = (seatId: string) => {
-    const seat = seats.find((s) => s.id === seatId);
+    const seat = seats.find((s: any) => s.id === seatId);
     if (seat && seat.isAvailable) {
       setSelectedSeats((prev) =>
         prev.includes(seatId)
@@ -113,6 +87,42 @@ export default function BookPage() {
     }
   };
 
+  useEffect(() => {
+    // Function to fetch movie showtimes
+    const fetchMovieShowtimes = async () => {
+      try {
+        // Fetch showtimes for the specific movie
+        const response = await axios.get(
+          `http://127.0.0.1:8000/showings/showings/movie/${movieId}/`
+        );
+
+        console.log(response.data, "response");
+
+        // Get the base price from the response, or use a default
+        const basePrice = response.data[0].price
+          ? Number.parseFloat(response.data[0].price)
+          : 10.0;
+
+        // Generate seats with the fetched price
+        const generatedSeats = generateSeats(basePrice);
+        setSeats(generatedSeats);
+      } catch (error) {
+        console.error("Error fetching showtimes:", error);
+
+        // Fallback to default seats if fetch fails
+        setSeats(generateSeats());
+      }
+    };
+
+    // Call the fetch function
+    fetchMovieShowtimes();
+
+    // If editing seats, set the selected seats
+    if (editSeats) {
+      setSelectedSeats(editSeats.split(","));
+    }
+  }, [movieId, time, editSeats]);
+
   const handleReserve = () => {
     const selectedSeatsParam = selectedSeats.join(",");
     router.push(
@@ -121,12 +131,12 @@ export default function BookPage() {
   };
 
   const totalPrice = selectedSeats.reduce((total, seatId) => {
-    const seat = seats.find((s) => s.id === seatId);
+    const seat = seats.find((s: any) => s.id === seatId);
     return total + (seat?.price || 0);
   }, 0);
 
   // Group seats by row for easier rendering
-  const seatsByRow = seats.reduce((acc, seat) => {
+  const seatsByRow = seats.reduce((acc: any, seat: any) => {
     if (!acc[seat.row]) {
       acc[seat.row] = [];
     }
@@ -134,12 +144,8 @@ export default function BookPage() {
     return acc;
   }, {} as Record<string, Seat[]>);
 
-  console.log(searchParams, 'searchParams');
-  
-
   return (
     <div className="max-w-5xl mx-auto py-8 px-4">
-      
       <h1 className="text-3xl font-bold mb-4">Select Your Seats</h1>
       <p className="mb-4">
         Movie: {movieId}, Date: {date}, Time: {time}
@@ -153,43 +159,54 @@ export default function BookPage() {
 
         {/* Seating Area */}
         <div className="space-y-4 min-w-max">
-          {Object.entries(seatsByRow).map(([row, rowSeats]) => (
+          {Object.entries(seatsByRow).map(([row, rowSeats]: any): any => (
             <div key={row} className="flex items-center">
               {/* Row Label */}
               <div className="w-8 text-center font-bold">{row}</div>
 
               {/* Seats */}
-              <div className="flex gap-2">
-                {rowSeats.map((seat, index) => {
-                  const isEndOfPair =
-                    (row === "A" &&
-                      (index + 1) % 2 === 0 &&
-                      index < rowSeats.length - 1) ||
-                    (row !== "A" && (index + 1) % 2 === 0 && index < 6);
+              <div
+                className={cn(
+                  "flex",
+                  row === "A" ? "justify-center" : "justify-start"
+                )}
+              >
+                <div className="flex gap-2">
+                  {rowSeats.map((seat: any, index: any) => {
+                    const isEndOfPair =
+                      (row === "A" &&
+                        (index + 1) % 2 === 0 &&
+                        index < rowSeats.length - 1) ||
+                      (row !== "A" && (index + 1) % 2 === 0 && index < 6);
 
-                  if (["I", "J"].includes(row) && seat.number === 4) {
+                    if (["I", "J"].includes(row) && seat.number === 4) {
+                      return (
+                        <div
+                          key={seat.id}
+                          className={cn("inline-flex", isEndOfPair && "mr-4")}
+                        >
+                          <div
+                            key={seat.id}
+                            className="w-8 h-8 w-8 h-8 rounded-t-lg"
+                          />
+                        </div>
+                      ); // Empty space for seat 4
+                    }
+
                     return (
                       <div
                         key={seat.id}
                         className={cn("inline-flex", isEndOfPair && "mr-4")}
                       >
-                        <div
-                          key={seat.id}
-                          className="w-8 h-8 w-8 h-8 rounded-t-lg"
+                        <SeatButton
+                          seat={seat}
+                          isSelected={selectedSeats.includes(seat.id)}
+                          onToggle={toggleSeat}
                         />
                       </div>
-                    ); // Empty space for seat 4
-                  }
-
-                  return (
-                    <SeatButton
-                      key={seat.id}
-                      seat={seat}
-                      isSelected={selectedSeats.includes(seat.id)}
-                      onToggle={toggleSeat}
-                    />
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
           ))}
@@ -199,9 +216,7 @@ export default function BookPage() {
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
         <div>
           <p>Selected Seats: {selectedSeats.join(", ")}</p>
-          <p className="font-bold">
-            Total Price: {totalPrice.toLocaleString()} UGX
-          </p>
+          <p className="font-bold">Total Price: {totalPrice.toFixed(2)} UGX</p>
         </div>
         <Button
           onClick={handleReserve}

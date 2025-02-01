@@ -1,19 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import {
-  ChevronRight,
-  Play,
-  Calendar,
-  Clock,
-  Popcorn,
-  LogIn,
-} from "lucide-react";
-import { type MovieDetails, MovieDay } from "@/types/movie";
+import { Play, Calendar, Clock, Popcorn, LogIn } from "lucide-react";
+// import { type MovieDetails } from "@/types/movie";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-import { useAuth, SignInButton } from "@clerk/nextjs";
+import { SignInButton } from "@clerk/nextjs";
 import {
   Dialog,
   DialogContent,
@@ -21,23 +15,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import axios from "axios";
 
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
-interface MovieShowtimesProps {
-  movie: MovieDetails | null;
-}
+// interface MovieShowtimesProps {
+//   movie: MovieDetails | null;
+// }
 
-export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
-  const [selectedDay, setSelectedDay] = useState<string | null>(
-    movie?.days[0]?.date || null
-  );
+export default function MovieShowtimes({ movie }: any) {
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [showtimes, setShowtimes] = useState<any[]>([]);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const showtimesRef = useRef<HTMLDivElement>(null);
-  // const { isSignedIn } = useAuth();
 
   useEffect(() => {
     if (searchParams.get("scrollToShowtimes") === "true") {
@@ -45,25 +38,86 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
     }
   }, [searchParams]);
 
-  if (!movie) {
-    return <div className="text-center py-8">Loading movie details...</div>;
-  }
+  useEffect(() => {
+    if (movie) {
+      fetchMovieShowtimes();
+    }
 
-  const selectedDayData = movie.days.find((day) => day.date === selectedDay);
+    // console.log(movie, "movie");
+  }, [movie]);
+
+  const fetchMovieShowtimes = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/showings/showings/movie/${movie?.id}/`
+      );
+      const rawData = response.data;
+
+      console.log(rawData, "rawData");
+
+      // Group showtimes by date
+      const groupedShowtimes = rawData.reduce((acc: any, showtime: any) => {
+        const { date, id, time, price, includes_3d_glasses, includes_popcorn } =
+          showtime; // Ensure type exists
+        const existingDate = acc.find((entry: any) => entry.date === date);
+
+        if (existingDate) {
+          existingDate.showtimes.push({
+            id,
+            time,
+            price,
+            includes_3d_glasses,
+            includes_popcorn,
+            // type: type || "",
+          });
+        } else {
+          acc.push({
+            date,
+            showtimes: [
+              {
+                id,
+                time,
+                price,
+                includes_3d_glasses,
+                includes_popcorn,
+                // type: type || "",
+              },
+            ],
+          });
+        }
+
+        return acc;
+      }, []);
+
+      setShowtimes(groupedShowtimes);
+
+      // console.log(showtimes, "showtimes");
+    } catch (error) {
+      console.error("Error fetching showtimes:", error);
+      setShowtimes([]);
+    }
+  };
+
+  console.log(showtimes, "showtimes");
+
+  // const selectedDayData = showtimes.find((day) => day.date === selectedDay);
+  const selectedDayData = showtimes.find((day) => day.date === selectedDay) || {
+    showtimes: [],
+  };
 
   const handleBookNow = (showtime: string) => {
-    // if (!isSignedIn) {
-    //   setShowAuthDialog(true);
-    //   return;
-    // }
     router.push(
-      `/movies/${movie.id}/book?date=${selectedDay}&time=${showtime}`
+      `/movies/${movie?.id}/book?date=${selectedDay}&time=${showtime}`
     );
   };
 
   const scrollToShowtimes = () => {
     showtimesRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  if (!movie) {
+    return <div className="text-center py-8">Loading movie details...</div>;
+  }
 
   return (
     <div className="w-full bg-gray-100">
@@ -111,16 +165,15 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
             </div>
             <div>
               <h3 className="font-semibold">Cast</h3>
-              {/* actor: [ 'James Earl Jones', 'Jeremy Irons', 'Matthew Broderick' ], */}
-              <p>{movie.actor.join(",")}</p>
+              <p>{movie.actor.join(", ")}</p>
             </div>
             <div>
               <h3 className="font-semibold">Genre</h3>
-              <p>{movie.genre.join(", ")}</p>
+              <p>{movie.highlight}</p>
             </div>
             <div>
               <h3 className="font-semibold">Release Date</h3>
-              <p>{movie.days[0].date}</p>
+              <p>{movie.releaseDate}</p>
             </div>
           </div>
         </div>
@@ -133,22 +186,27 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
         </div>
 
         {/* Showtimes */}
+        {/* Showtimes */}
         <div ref={showtimesRef}>
           <h2 className="text-2xl font-bold mb-4">Showtimes</h2>
+
+          {/* Date Selection Buttons */}
           <div className="flex flex-wrap gap-2 mb-4">
-            {movie.days.map((day) => (
+            {showtimes.map((day) => (
               <Button
                 key={day.date}
                 variant={selectedDay === day.date ? "default" : "outline"}
                 onClick={() => setSelectedDay(day.date)}
               >
-                {day.displayDate}
+                {day.date}
               </Button>
             ))}
           </div>
-          {selectedDayData && (
+
+          {/* Showtimes Display */}
+          {selectedDayData?.showtimes?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {selectedDayData.showtimes.map((showtime, index) => (
+              {selectedDayData.showtimes.map((showtime: any, index: any) => (
                 <div
                   key={index}
                   className="p-4 border rounded-lg bg-white hover:shadow-md transition-shadow"
@@ -163,10 +221,10 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500 flex items-center">
-                      {showtime.type.includes("3D") && (
+                      {showtime.includes_3d_glasses && (
                         <span className="mr-1">3D</span>
                       )}
-                      {showtime.type.includes("Popcorn") && (
+                      {showtime.includes_popcorn && (
                         <Popcorn className="h-4 w-4 ml-1" />
                       )}
                     </span>
@@ -180,6 +238,10 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
                 </div>
               ))}
             </div>
+          ) : (
+            <p className="text-gray-500">
+              Select a date to see the time of the show.
+            </p>
           )}
         </div>
       </div>
@@ -191,7 +253,7 @@ export default function MovieShowtimes({ movie }: MovieShowtimesProps) {
             <ReactPlayer
               url={movie.trailerUrl}
               width="100%"
-              height="auto"
+              height="480px"
               controls
             />
             <Button className="mt-4" onClick={() => setShowTrailer(false)}>

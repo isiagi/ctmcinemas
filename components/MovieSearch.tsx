@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-wrapper-object-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -5,7 +7,8 @@ import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
-import { movies } from "@/lib/movies";
+// import { movies } from "@/lib/movies";
+import axios from "axios";
 
 // const allMovies = [
 //   "The Shawshank Redemption",
@@ -23,19 +26,28 @@ import { movies } from "@/lib/movies";
 export default function MovieSearch() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredMovies, setFilteredMovies] = useState<string[]>([]);
-  const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
+  const [filteredMovies, setFilteredMovies] = useState<any>([]);
+  const [selectedMovies, setSelectedMovies] = useState<any[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [allMovies, setAllMovies] = useState<String[]>()
+  const [allMovies, setAllMovies] = useState<String[]>();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // filter movies titles from movies to create allMovies
   useEffect(() => {
-    const movieTitles = movies.map(movie => movie.title);
+    const getAllMovies = () => {
+      axios
+        .get("http://127.0.0.1:8000/movies/movies/")
+        .then((response) => {
+          const movieTitles = response.data.map((movie: any) => movie.title);
+          setAllMovies(movieTitles);
+        })
+        .catch(() => {
+          setAllMovies([]);
+        });
+    };
     // set allmovies
-    setAllMovies(movieTitles);
+    getAllMovies();
   }, []);
-
 
   useEffect(() => {
     if (searchTerm) {
@@ -93,7 +105,7 @@ export default function MovieSearch() {
             ref={dropdownRef}
             className="absolute z-10 mt-1 w-full bg-gray-700 rounded-md shadow-lg max-h-60 overflow-auto"
           >
-            {filteredMovies.map((movie) => (
+            {filteredMovies.map((movie: any) => (
               <div
                 key={movie}
                 className="flex items-center space-x-2 p-2 hover:bg-gray-600"

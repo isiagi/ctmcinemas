@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -5,19 +6,21 @@ import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Edit2, Film, Calendar, Clock, Info, Utensils } from "lucide-react";
 import Image from "next/image";
-import { movies } from "@/lib/movies";
-import { useAuth } from "@clerk/nextjs";
+// import { movies } from "@/lib/movies";
+// import { useAuth } from "@clerk/nextjs";
+import axios from "axios";
+import PopupMessage from "@/components/popup";
 // import { auth } from "@clerk/nextjs/server";
 
-interface MovieDetails {
-  title: string;
-  image: string;
-  duration: string;
-  rating: string;
-  screen: string;
-  price: number;
-  type: string;
-}
+// interface MovieDetails {
+//   title: string;
+//   image: string;
+//   duration: string;
+//   rating: string;
+//   screen: string;
+//   price: number;
+//   type: string;
+// }
 
 interface EatsItem {
   id: string;
@@ -34,22 +37,18 @@ const eatsItems: EatsItem[] = [
 
 export default function BookingSummaryPage() {
   // const { isLoaded, isSignedIn, userId } = auth();
+  const [popupMessage, setPopupMessage] = useState("");
+  const [loader, setLoader] = useState(true);
   const searchParams = useSearchParams();
   const params = useParams();
   const router = useRouter();
-  const [movieDetails, setMovieDetails] = useState<MovieDetails>({
-    title: "Nosferatu",
-    image:
-      "https://assets.voxcinemas.com/posters/P_HO00011813_1734505897702.jpg",
-    duration: "2h 15m",
-    rating: "PG-13",
-    screen: "Standard",
-    price: 10000,
-    type: "3D",
-  });
+  const [movieDetails, setMovieDetails] = useState<any>({});
   const [selectedEats, setSelectedEats] = useState<Record<string, number>>({});
+  const [color, setColor] = useState<string>("");
+  const [bgColor, setBgColor] = useState<string>("");
 
-  const { userId } = useAuth();
+  const [user, setUser] = useState<any>({});
+  const access_token = localStorage.getItem("access_token");
 
   const seats = searchParams.get("seats")?.split(",") || [];
   const date = searchParams.get("date");
@@ -57,17 +56,69 @@ export default function BookingSummaryPage() {
   const movieId = params.id;
   const eats = searchParams.get("eats");
 
-  // useEffect(() => {
-  //   if (isLoaded && !isSignedIn) {
-  //     router.push("/login");
-  //   }
-  // }, [isLoaded, isSignedIn, router]);
+  const getMovieDetails = async () => {
+    try {
+      const date = searchParams.get("date");
+      const time = searchParams.get("time");
+
+      const showResponse = await axios.get(
+        `http://127.0.0.1:8000/showings/showings/movie/${movieId}/`
+      );
+      const showData = showResponse.data;
+
+      const movieResponse = await axios.get(
+        `http://127.0.0.1:8000/movies/movies/${movieId}/`
+      );
+      const movieData = movieResponse.data;
+
+      const filteredShow = showData.find(
+        (show: any) => show.date === date && show.time === time
+      );
+
+      const showDetails = filteredShow
+        ? { ...filteredShow, showId: filteredShow.id }
+        : {};
+
+      delete showDetails.id;
+
+      const combinedDetails = {
+        ...movieData,
+        ...showDetails,
+      };
+
+      setLoader(false);
+      setMovieDetails(combinedDetails);
+    } catch (err) {
+      setMovieDetails({});
+      console.error("Error fetching movie/showtime details:", err);
+    }
+  };
+
+  const getUserProfile = () => {
+    const config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "http://127.0.0.1:8000/auth/profile/",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        setUser({});
+        console.log(error.response.data);
+      });
+  };
+
   // get movie details
   useEffect(() => {
-    const movie = movies.find((movie) => movie.id === movieId);
-    if (movie) {
-      setMovieDetails(movie);
-    }
+    getMovieDetails();
+    getUserProfile();
   }, [movieId]);
 
   useEffect(() => {
@@ -111,37 +162,61 @@ export default function BookingSummaryPage() {
 
   const handlePayment = async () => {
     try {
-      // console.log("Creating order...");
-      // const response = await fetch("/api/create-order", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     userId,
-      //     movieId,
-      //     date,
-      //     time,
-      //     seats,
-      //     eats: selectedEats,
-      //     totalPrice: 1000,
-      //   }),
-      // });
-      // if (response.ok) {
-      //   alert("Order created successfully!");
-      //   router.push("/orders");
-      // } else {
-      //   alert("Failed to create order. Please try again.");
-      // }
-    } catch (error) {
-      console.error("Error creating order:", error);
-      alert("An error occurred. Please try again.");
+      if (!user || !user.is_active) {
+        setColor("#960000");
+        setBgColor("#111827");
+        setPopupMessage("You need to sign in to make your payment.");
+        return;
+      }
+
+      const accessToken = localStorage.getItem("access_token");
+      if (!accessToken) {
+        setColor("#960000");
+        setBgColor("#111827");
+        setPopupMessage("You are not authenticated. Please sign in again.");
+        return;
+      }
+
+      const payload = {
+        user: user.id,
+        total_price: calculateTotal(),
+        eats,
+        seats,
+        showing: movieDetails.showId,
+      };
+
+      console.log(payload, "payload");
+
+      await axios.post("http://127.0.0.1:8000/orders/orders/", payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      setColor("#62a03f");
+      setBgColor("#111827");
+      setPopupMessage("Order placed successfully!");
+    } catch (error: any) {
+      console.error(
+        "Error creating order:",
+        error.response?.data || error.message
+      );
+      setColor("#960000");
+      setBgColor("#111827");
+      setPopupMessage("An error occurred. Please try again.");
+      // alert(error.response?.data?.message || "An error occurred. Please try again.");
     }
   };
 
-  // if (!isLoaded || !isSignedIn) {
-  //   return <div>Loading...</div>;
-  // }
+  if (loader) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
@@ -173,7 +248,7 @@ export default function BookingSummaryPage() {
               Duration: {movieDetails.duration}
             </p>
             <p className="text-gray-600 mb-1">Rating: {movieDetails.rating}</p>
-            <p className="text-gray-600">Screen: {movieDetails.screen}</p>
+            <p className="text-gray-600">Highlight: {movieDetails.highlight}</p>
           </div>
         </div>
       </div>
@@ -266,7 +341,7 @@ export default function BookingSummaryPage() {
             </span>
           </div>
           <div className="flex justify-between">
-            <span>{movieDetails.type}</span>
+            <span>{movieDetails.includes_3d_glasses ? "3D Glasses" : ""}</span>
             <span>Included</span>
           </div>
           {Object.entries(selectedEats).map(([itemId, quantity]) => {
@@ -293,6 +368,14 @@ export default function BookingSummaryPage() {
       </div>
 
       {/* Payment Button */}
+      {popupMessage && (
+        <PopupMessage
+          color={color}
+          bgColor={bgColor}
+          message={popupMessage}
+          onClose={() => setPopupMessage("")}
+        />
+      )}
       <div className="mt-8 flex justify-end">
         <Button size="lg" className="w-full md:w-auto" onClick={handlePayment}>
           Proceed to Payment
