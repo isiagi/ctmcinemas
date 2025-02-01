@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 // import { movies } from "@/lib/movies";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 
 // const allMovies = [
 //   "The Shawshank Redemption",
@@ -34,9 +34,9 @@ export default function MovieSearch() {
 
   // filter movies titles from movies to create allMovies
   useEffect(() => {
-    const getAllMovies = () => {
-      axios
-        .get("http://127.0.0.1:8000/movies/movies/")
+    const getAllMovies = async () => {
+      await axiosInstance
+        .get("movies/movies/")
         .then((response) => {
           const movieTitles = response.data.map((movie: any) => movie.title);
           setAllMovies(movieTitles);

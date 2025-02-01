@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 // import { movies } from "@/lib/movies";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 
 export function WhatsOn() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -16,8 +16,17 @@ export function WhatsOn() {
   const router = useRouter();
 
   const getMoviesFromAPI = async () => {
-    await axios
-      .get("http://127.0.0.1:8000/movies/movies/")
+    // await axios
+    //   .get("http://127.0.0.1:8000/movies/movies/")
+    //   .then((response) => {
+    //     setMovies(response.data);
+    //   })
+    //   .catch((error) => {
+    //     setMovies([]);
+    //     console.error("No movies found because of: ", error);
+    //   });
+    await axiosInstance
+      .get("movies/movies/")
       .then((response) => {
         setMovies(response.data);
       })

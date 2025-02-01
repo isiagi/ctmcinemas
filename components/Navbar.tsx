@@ -9,6 +9,7 @@ import MovieSearch from "./MovieSearch";
 import AuthModal from "./signinup";
 import axios from "axios";
 import PopupMessage from "./popup";
+import axiosInstance from "@/lib/axios";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -81,8 +82,19 @@ export default function Navbar() {
     }
 
     try {
-      await axios.post(
-        "http://127.0.0.1:8000/auth/logout/",
+      // await axios.post(
+      //   "http://127.0.0.1:8000/auth/logout/",
+      //   {},
+      //   {
+      //     headers: {
+      //       refresh: tokens.refresh_token,
+      //       access: tokens.access_token,
+      //     },
+      //   }
+      // );
+
+      await axiosInstance.post(
+        "auth/logout/",
         {},
         {
           headers: {

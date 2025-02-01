@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
@@ -48,8 +48,8 @@ export default function MovieShowtimes({ movie }: any) {
 
   const fetchMovieShowtimes = async () => {
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/showings/showings/movie/${movie?.id}/`
+      const response = await axiosInstance.get(
+        `showings/showings/movie/${movie?.id}/`
       );
       const rawData = response.data;
 

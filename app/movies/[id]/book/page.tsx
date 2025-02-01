@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import axios from "axios"; // Make sure to import axios
+import axiosInstance from "@/lib/axios";
 
 interface Seat {
   id: string;
@@ -92,8 +92,8 @@ export default function BookPage() {
     const fetchMovieShowtimes = async () => {
       try {
         // Fetch showtimes for the specific movie
-        const response = await axios.get(
-          `http://127.0.0.1:8000/showings/showings/movie/${movieId}/`
+        const response = await axiosInstance.get(
+          `showings/showings/movie/${movieId}/`
         );
 
         console.log(response.data, "response");

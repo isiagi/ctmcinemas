@@ -8,7 +8,7 @@ import { Footer } from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CinemaHub",
+  title: "ETM Cinemas",
   description: "Your one-stop cinema experience",
 };
 

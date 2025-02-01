@@ -10,6 +10,7 @@ import Image from "next/image";
 // import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import PopupMessage from "@/components/popup";
+import axiosInstance from "@/lib/axios";
 // import { auth } from "@clerk/nextjs/server";
 
 // interface MovieDetails {
@@ -61,13 +62,13 @@ export default function BookingSummaryPage() {
       const date = searchParams.get("date");
       const time = searchParams.get("time");
 
-      const showResponse = await axios.get(
-        `http://127.0.0.1:8000/showings/showings/movie/${movieId}/`
+      const showResponse = await axiosInstance.get(
+        `showings/showings/movie/${movieId}/`
       );
       const showData = showResponse.data;
 
-      const movieResponse = await axios.get(
-        `http://127.0.0.1:8000/movies/movies/${movieId}/`
+      const movieResponse = await axiosInstance.get(
+        `movies/movies/${movieId}/`
       );
       const movieData = movieResponse.data;
 

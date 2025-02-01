@@ -6,8 +6,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Calendar, Eye } from "lucide-react";
 // import { movies } from "@/lib/movies";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axiosInstance from "@/lib/axios";
 
 export default function MoviesPage() {
   const router = useRouter();
@@ -22,14 +22,17 @@ export default function MoviesPage() {
   };
 
   const getMoviesFromAPI = async () => {
-    await axios
-      .get("http://127.0.0.1:8000/movies/movies/")
+    await axiosInstance
+      .get("movies/movies/")
       .then((response) => {
         setMovies(response.data);
       })
       .catch((error) => {
         setMovies([]);
-        console.error("No movies found because of: ", error);
+        console.log(error);
+      })
+      .finally(() => {
+        // setLoading(false);
       });
   };
 

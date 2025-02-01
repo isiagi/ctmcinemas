@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Clock, Play, Info, X } from "lucide-react";
 import dynamic from "next/dynamic";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
@@ -62,8 +62,8 @@ export default function ComingSoonPage() {
   const router = useRouter();
 
   const getMoviesFromAPI = async () => {
-    await axios
-      .get("http://127.0.0.1:8000/movies/movies/by_status/?status=COMING_SOON")
+    await axiosInstance
+      .get("movies/movies/by_status/?status=COMING_SOON")
       .then((response) => {
         // filter where status is "coming soon"
         // const filteredMovies = response.data.filter(

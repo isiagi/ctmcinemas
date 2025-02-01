@@ -2,6 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import axiosInstance from "@/lib/axios";
 import { Calendar, Eye } from "lucide-react";
 import Image from "next/image";
 import React from "react";
@@ -11,11 +12,14 @@ function Page() {
 
   React.useEffect(() => {
     const fetchMovies = async () => {
-      const response = await fetch(
-        "http://127.0.0.1:8000/movies/movies/by_status/?status=NOW_SHOWING"
+      //   const response = await fetch(
+      //     "http://127.0.0.1:8000/movies/movies/by_status/?status=NOW_SHOWING"
+      //   );
+      //   const data = await response.json();
+      const response = await axiosInstance.get(
+        "movies/movies/by_status/?status=NOW_SHOWING"
       );
-      const data = await response.json();
-      setMovies(data);
+      setMovies(response.data);
     };
     fetchMovies();
   }, []);

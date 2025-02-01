@@ -3,8 +3,8 @@
 import { MovieDetails } from "@/types/movie";
 import MovieShowtimes from "@/components/movie-showtimes";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "next/navigation";
+import axiosInstance from "@/lib/axios";
 
 export default function MoviePage() {
   const [movieData, setMovieData] = useState<MovieDetails | null>(null);
@@ -13,9 +13,7 @@ export default function MoviePage() {
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/movies/movies/"
-        );
+        const response = await axiosInstance.get("movies/movies/");
         const movies: MovieDetails[] = response.data;
 
         const movie = movies.find((movie) => movie.id === id);
