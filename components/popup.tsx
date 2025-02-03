@@ -17,7 +17,7 @@ const PopupMessage = ({ color, message, bgColor, onClose }: any) => {
 
   return (
     <div
-      className={`fixed top-5 right-5 border-0 border-l-2 border-[${color}] bg-[${bgColor}] text-white px-6 py-3 rounded-sm shadow-lg transition-all animate-fadeIn z-50`}
+      className={`fixed top-5 right-5 border-0 border-l-2 border-red-600 bg-red-200 text-black px-6 py-3 rounded-sm shadow-lg transition-all animate-fadeIn z-50`}
     >
       {message}
     </div>

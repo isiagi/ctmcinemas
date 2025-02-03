@@ -42,8 +42,6 @@ export default function MovieShowtimes({ movie }: any) {
     if (movie) {
       fetchMovieShowtimes();
     }
-
-    // console.log(movie, "movie");
   }, [movie]);
 
   const fetchMovieShowtimes = async () => {
@@ -52,8 +50,6 @@ export default function MovieShowtimes({ movie }: any) {
         `showings/showings/movie/${movie?.id}/`
       );
       const rawData = response.data;
-
-      console.log(rawData, "rawData");
 
       // Group showtimes by date
       const groupedShowtimes = rawData.reduce((acc: any, showtime: any) => {
@@ -91,21 +87,19 @@ export default function MovieShowtimes({ movie }: any) {
 
       setShowtimes(groupedShowtimes);
 
-      // console.log(showtimes, "showtimes");
     } catch (error) {
       console.error("Error fetching showtimes:", error);
       setShowtimes([]);
     }
   };
 
-  console.log(showtimes, "showtimes");
-
   // const selectedDayData = showtimes.find((day) => day.date === selectedDay);
   const selectedDayData = showtimes.find((day) => day.date === selectedDay) || {
     showtimes: [],
   };
 
-  const handleBookNow = (showtime: string) => {
+  const handleBookNow = (showtime: string, showtimeId: string) => {
+    localStorage.setItem("show_id", showtimeId);
     router.push(
       `/movies/${movie?.id}/book?date=${selectedDay}&time=${showtime}`
     );
@@ -230,7 +224,7 @@ export default function MovieShowtimes({ movie }: any) {
                     </span>
                     <Button
                       size="sm"
-                      onClick={() => handleBookNow(showtime.time)}
+                      onClick={() => handleBookNow(showtime.time, showtime.id)}
                     >
                       <Clock className="mr-2 h-4 w-4" /> Book Now
                     </Button>

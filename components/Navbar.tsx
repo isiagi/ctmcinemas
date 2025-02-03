@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Film, Menu, X } from "lucide-react";
+import { Film, ListOrderedIcon, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MovieSearch from "./MovieSearch";
 import AuthModal from "./signinup";
@@ -49,15 +49,11 @@ export default function Navbar() {
         },
       };
 
-      axios
-        .request(config)
-        .then((response) => {
-          setUser(response.data);
-        })
-        .catch((error) => {
-          setUser({});
-          console.log(error.response?.data);
-        });
+      axios.request(config).then((response) => {
+        setUser(response.data);
+      }).catch(() => {
+        setUser({});
+      });
     };
 
     if (tokens.access_token) {
@@ -81,35 +77,25 @@ export default function Navbar() {
       return;
     }
 
-    try {
-      // await axios.post(
-      //   "http://127.0.0.1:8000/auth/logout/",
-      //   {},
-      //   {
-      //     headers: {
-      //       refresh: tokens.refresh_token,
-      //       access: tokens.access_token,
-      //     },
-      //   }
-      // );
+    console.log(tokens.refresh_token)
 
-      await axiosInstance.post(
-        "auth/logout/",
-        {},
+    try {
+      await axios.post(
+        "http://127.0.0.1:8000/auth/logout/",
+        { refresh: tokens.refresh_token },
         {
           headers: {
-            refresh: tokens.refresh_token,
-            access: tokens.access_token,
+            "Content-Type": "application/json",
           },
         }
       );
 
-      // Clear tokens from local storage and state
-      window.localStorage.removeItem("access_token");
-      window.localStorage.removeItem("refresh_token");
+      // ✅ Clear tokens from local storage and state
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
       setTokens({ access_token: null, refresh_token: null });
 
-      // Clear user state and close dropdown
+      // ✅ Clear user state and close dropdown
       setUser({});
       setIsDropdownOpen(false);
 
@@ -117,17 +103,15 @@ export default function Navbar() {
       setBgColor("green-200");
       setPopupMessage("Logout successful");
     } catch (error: any) {
-      setUser({});
-      console.error("Logout failed", error.response?.data);
+      console.log("Logout failed", error.response?.data || error.message);
+      setColor("red-800");
+      setBgColor("red-200");
+      setPopupMessage(error.response?.data?.message || "Logout failed.");
     }
   };
 
   return (
-    <nav
-      className={`w-full transition-all duration-300 ${
-        isScrolled ? "fixed top-0 bg-gray-800 shadow-lg z-50" : "bg-gray-800"
-      }`}
-    >
+    <nav className={`w-full transition-all duration-300 ${isScrolled ? "fixed top-0 bg-gray-800 shadow-lg z-50" : "bg-gray-800"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -177,35 +161,24 @@ export default function Navbar() {
 
                     <div className="p-3">
                       <Link href="/orders">
-                        <h1>orders</h1>
+                        <h1 className="flex gap-2"> <ListOrderedIcon /> orders</h1>
                       </Link>
                     </div>
 
-                    <button
-                      className="block w-full text-center bg-red-500 text-white py-2 rounded-b-lg hover:bg-red-600"
-                      onClick={handleLogout}
-                    >
+                    <button className="block w-full text-center bg-red-500 text-white py-2 rounded-b-lg hover:bg-red-600" onClick={handleLogout}>
                       Logout
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-white hover:bg-white text-blue-800"
-                onClick={() => setOpenUp(true)}
-              >
+              <Button variant="outline" size="sm" className="border-white hover:bg-white text-blue-800" onClick={() => setOpenUp(true)}>
                 Sign In
               </Button>
             )}
           </div>
           <div className="-mr-2 flex md:hidden">
-            <Button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-            >
+            <Button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
               <span className="sr-only">Open main menu</span>
               {isMobileMenuOpen ? (
                 <X className="block h-6 w-6" aria-hidden="true" />
@@ -220,10 +193,7 @@ export default function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link
-              href="/whatson"
-              className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium"
-            >
+            <Link href="/whatson" className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">
               What&apos;s On
             </Link>
             <Link
