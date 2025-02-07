@@ -16,6 +16,11 @@ interface Seat {
   price: number;
 }
 
+// interface SeatRow {
+//   row: string;
+//   seats: Seat[];
+// }
+
 // Generate seats based on the specific arrangement and price
 const generateSeats = (basePrice: number = 10.0) => {
   const rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
@@ -70,11 +75,12 @@ export default function BookPage() {
   const router = useRouter();
   const [seats, setSeats] = useState(generateSeats());
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [takenSeats, setTakenSeats] = useState<string[]>([]);
 
   const movieId = params.id as string;
   const date = searchParams.get("date");
   const time = searchParams.get("time");
-  const editSeats = searchParams.get("seats"); // Add this to get existing seats
+  const editSeats = searchParams.get("seats");
 
   const toggleSeat = (seatId: string) => {
     const seat = seats.find((s: any) => s.id === seatId);
@@ -96,8 +102,6 @@ export default function BookPage() {
           `showings/showings/movie/${movieId}/`
         );
 
-        console.log(response.data, "response");
-
         // Get the base price from the response, or use a default
         const basePrice = response.data[0].price
           ? Number.parseFloat(response.data[0].price)
@@ -107,15 +111,39 @@ export default function BookPage() {
         const generatedSeats = generateSeats(basePrice);
         setSeats(generatedSeats);
       } catch (error) {
-        console.error("Error fetching showtimes:", error);
+        // console.error("Error fetching showtimes:", error);
+        console.log(error);
 
         // Fallback to default seats if fetch fails
         setSeats(generateSeats());
       }
     };
 
+    const movie_orders = () => {
+      const show_id = localStorage.getItem("show_id");
+
+      axiosInstance
+        .get(`orders/orders/booked-seats/${show_id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        })
+        .then((response) => {
+          // const formattedSeats = response.data.booked_seats.map((seat: string) => ({
+          //   row: seat.charAt(0),
+          //   column: parseInt(seat.slice(1), 10)
+          // }));
+
+          setTakenSeats(response.data.booked_seats);
+        })
+        .catch(() => {
+          setTakenSeats([]);
+        });
+    };
+
     // Call the fetch function
     fetchMovieShowtimes();
+    movie_orders();
 
     // If editing seats, set the selected seats
     if (editSeats) {
@@ -185,10 +213,7 @@ export default function BookPage() {
                           key={seat.id}
                           className={cn("inline-flex", isEndOfPair && "mr-4")}
                         >
-                          <div
-                            key={seat.id}
-                            className="w-8 h-8 w-8 h-8 rounded-t-lg"
-                          />
+                          <div key={seat.id} className="w-8 h-8 rounded-t-lg" />
                         </div>
                       ); // Empty space for seat 4
                     }
@@ -201,6 +226,7 @@ export default function BookPage() {
                         <SeatButton
                           seat={seat}
                           isSelected={selectedSeats.includes(seat.id)}
+                          isBooked={takenSeats.includes(seat.id)}
                           onToggle={toggleSeat}
                         />
                       </div>
@@ -249,10 +275,11 @@ export default function BookPage() {
 interface SeatButtonProps {
   seat: Seat;
   isSelected: boolean;
+  isBooked: boolean;
   onToggle: (seatId: string) => void;
 }
 
-function SeatButton({ seat, isSelected, onToggle }: SeatButtonProps) {
+function SeatButton({ seat, isSelected, onToggle, isBooked }: SeatButtonProps) {
   return (
     <button
       className={cn(
@@ -261,10 +288,11 @@ function SeatButton({ seat, isSelected, onToggle }: SeatButtonProps) {
         seat.isAvailable && isSelected && "bg-green-500 text-white",
         seat.isAvailable &&
           !isSelected &&
-          "bg-blue-500 text-white hover:bg-blue-600"
+          "bg-blue-500 text-white hover:bg-blue-600",
+        isBooked && "bg-gray-300 cursor-not-allowed hover:bg-gray-300"
       )}
       onClick={() => onToggle(seat.id)}
-      disabled={!seat.isAvailable}
+      disabled={!seat.isAvailable || isSelected || isBooked}
     >
       {seat.number}
     </button>
