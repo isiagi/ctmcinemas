@@ -76,6 +76,7 @@ export default function BookPage() {
   const [seats, setSeats] = useState(generateSeats());
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [takenSeats, setTakenSeats] = useState<string[]>([]);
+  const [loadingSeats, setLoadingSeats] = useState(true)
 
   const movieId = params.id as string;
   const date = searchParams.get("date");
@@ -110,6 +111,7 @@ export default function BookPage() {
         // Generate seats with the fetched price
         const generatedSeats = generateSeats(basePrice);
         setSeats(generatedSeats);
+        console.log(generatedSeats);
       } catch (error) {
         // console.error("Error fetching showtimes:", error);
         console.log(error);
@@ -129,14 +131,11 @@ export default function BookPage() {
           },
         })
         .then((response) => {
-          // const formattedSeats = response.data.booked_seats.map((seat: string) => ({
-          //   row: seat.charAt(0),
-          //   column: parseInt(seat.slice(1), 10)
-          // }));
-
+          setLoadingSeats(false)
           setTakenSeats(response.data.booked_seats);
         })
         .catch(() => {
+          setLoadingSeats(false)
           setTakenSeats([]);
         });
     };
@@ -171,6 +170,14 @@ export default function BookPage() {
     acc[seat.row].push(seat);
     return acc;
   }, {} as Record<string, Seat[]>);
+
+  if(loadingSeats) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin w-16 h-16 text-blue-500">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4">
@@ -244,11 +251,7 @@ export default function BookPage() {
           <p>Selected Seats: {selectedSeats.join(", ")}</p>
           <p className="font-bold">Total Price: {totalPrice.toFixed(2)} UGX</p>
         </div>
-        <Button
-          onClick={handleReserve}
-          disabled={selectedSeats.length === 0}
-          className="mt-4 sm:mt-0"
-        >
+        <Button onClick={handleReserve} disabled={selectedSeats.length === 0} className="mt-4 sm:mt-0">
           Reserve Seat{selectedSeats.length > 1 ? "s" : ""}
         </Button>
       </div>

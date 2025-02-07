@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 
-const PopupMessage = ({ color, message, bgColor, onClose }: any) => {
+const PopupMessage = ({ color, message, onClose }: any) => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -16,9 +16,7 @@ const PopupMessage = ({ color, message, bgColor, onClose }: any) => {
   if (!visible) return null;
 
   return (
-    <div
-      className={`fixed top-5 right-5 border-0 border-l-2 border-[${color}] bg-[${bgColor}] text-white px-6 py-3 rounded-sm shadow-lg transition-all animate-fadeIn z-50`}
-    >
+    <div className={`fixed top-5 right-5 border-0 border-l-2 ${color === 'success' ? 'border-green-600 bg-green-200 text-green-900' : 'border-red-600 bg-red-200 text-red-900'} px-6 py-3 rounded-sm shadow-lg transition-all animate-fadeIn z-50`}>
       {message}
     </div>
   );

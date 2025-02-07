@@ -7,7 +7,6 @@ import { Film, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MovieSearch from "./MovieSearch";
 import AuthModal from "./signinup";
-import axios from "axios";
 import PopupMessage from "./popup";
 import axiosInstance from "@/lib/axios";
 
@@ -18,7 +17,6 @@ export default function Navbar() {
   const [openUp, setOpenUp] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [color, setColor] = useState<string>("");
-  const [bgColor, setBgColor] = useState<string>("");
   const [popupMessage, setPopupMessage] = useState("");
   const [tokens, setTokens] = useState<{
     access_token: string | null;
@@ -40,23 +38,18 @@ export default function Navbar() {
     const getUserProfile = () => {
       if (!tokens.access_token) return;
 
-      const config = {
-        method: "get",
-        maxBodyLength: Infinity,
-        url: "http://127.0.0.1:8000/auth/profile/",
+      axiosInstance.get("auth/profile/", {
         headers: {
           Authorization: `Bearer ${tokens.access_token}`,
         },
-      };
-
-      axios
-        .request(config)
+        // withCredentials: true,
+      })
         .then((response) => {
           setUser(response.data);
         })
-        .catch((error) => {
+        .catch(() => {
           setUser({});
-          console.log(error.response?.data);
+          // console.log(error.response?.data);
         });
     };
 
@@ -75,24 +68,12 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     if (!tokens.refresh_token) {
-      setColor("red-800");
-      setBgColor("red-200");
+      setColor("error");
       setPopupMessage("No refresh token found.");
       return;
     }
 
     try {
-      // await axios.post(
-      //   "http://127.0.0.1:8000/auth/logout/",
-      //   {},
-      //   {
-      //     headers: {
-      //       refresh: tokens.refresh_token,
-      //       access: tokens.access_token,
-      //     },
-      //   }
-      // );
-
       await axiosInstance.post(
         "auth/logout/",
         {},
@@ -116,12 +97,12 @@ export default function Navbar() {
       setUser({});
       setIsDropdownOpen(false);
 
-      setColor("green-800");
-      setBgColor("green-200");
+      setColor("success");
       setPopupMessage("Logout successful");
     } catch (error: any) {
+      setColor("error");
       setUser({});
-      console.log("Logout failed", error.response?.data);
+      // console.log("Logout failed", error);
     }
   };
 
@@ -139,22 +120,13 @@ export default function Navbar() {
             </Link>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  href="/whatson"
-                  className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
+                <Link href="/whatson" className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
                   What&apos;s On
                 </Link>
-                <Link
-                  href="/comingsoon"
-                  className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
+                <Link href="/comingsoon" className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
                   Coming Soon
                 </Link>
-                <Link
-                  href="/services"
-                  className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
+                <Link href="/services" className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
                   Services
                 </Link>
               </div>
@@ -164,10 +136,7 @@ export default function Navbar() {
             <MovieSearch />
             {user && user.is_active ? (
               <div className="relative">
-                <Button
-                  className="text-black text-sm mr-2 border bg-gray-400 rounded-full w-11 h-11 flex justify-center items-center font-extrabold"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
+                <Button className="text-black text-sm mr-2 border bg-gray-400 rounded-full w-11 h-11 flex justify-center items-center font-extrabold" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                   {user.name?.slice(0, 3)}
                 </Button>
 
@@ -184,31 +153,20 @@ export default function Navbar() {
                       </Link>
                     </div>
 
-                    <button
-                      className="block w-full text-center bg-red-500 text-white py-2 rounded-b-lg hover:bg-red-600"
-                      onClick={handleLogout}
-                    >
+                    <button className="block w-full text-center bg-red-500 text-white py-2 rounded-b-lg hover:bg-red-600" onClick={handleLogout}>
                       Logout
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-white hover:bg-white text-blue-800"
-                onClick={() => setOpenUp(true)}
-              >
+              <Button variant="outline" size="sm" className="border-white hover:bg-white text-blue-800" onClick={() => setOpenUp(true)}>
                 Sign In
               </Button>
             )}
           </div>
           <div className="-mr-2 flex md:hidden">
-            <Button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-            >
+            <Button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
               <span className="sr-only">Open main menu</span>
               {isMobileMenuOpen ? (
                 <X className="block h-6 w-6" aria-hidden="true" />
@@ -223,22 +181,13 @@ export default function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link
-              href="/whatson"
-              className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium"
-            >
+            <Link href="/whatson" className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">
               What&apos;s On
             </Link>
-            <Link
-              href="/comingsoon"
-              className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium"
-            >
+            <Link href="/comingsoon" className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">
               Coming Soon
             </Link>
-            <Link
-              href="/eats"
-              className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium"
-            >
+            <Link href="/eats" className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">
               Eats
             </Link>
           </div>
@@ -252,12 +201,7 @@ export default function Navbar() {
                   </span>
                 </div>
               ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full text-white border-white hover:bg-white hover:text-gray-800"
-                  onClick={() => setOpenUp(true)}
-                >
+                <Button variant="outline" size="sm" className="w-full text-white border-white hover:bg-white hover:text-gray-800" onClick={() => setOpenUp(true)}>
                   Sign In
                 </Button>
               )}
@@ -268,12 +212,7 @@ export default function Navbar() {
 
       <AuthModal isOpen={openUp} onClose={() => setOpenUp(false)} />
       {popupMessage && (
-        <PopupMessage
-          color={color}
-          bgColor={bgColor}
-          message={popupMessage}
-          onClose={() => setPopupMessage("")}
-        />
+        <PopupMessage color={color} message={popupMessage} onClose={() => setPopupMessage("")} />
       )}
     </nav>
   );

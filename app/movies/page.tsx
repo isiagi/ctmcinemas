@@ -27,9 +27,9 @@ export default function MoviesPage() {
       .then((response) => {
         setMovies(response.data);
       })
-      .catch((error) => {
+      .catch(() => {
         setMovies([]);
-        console.log(error);
+        // console.log(error);
       })
       .finally(() => {
         // setLoading(false);
@@ -62,21 +62,11 @@ export default function MoviesPage() {
                   <h2 className="text-2xl font-bold mb-2">{movie.title}</h2>
                   <p className="mb-6 text-lg">{movie.description}</p>
                   <div className="flex space-x-4">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-white border-white hover:bg-white hover:text-black"
-                      onClick={() => handleViewMovie(movie.id)}
-                    >
+                    <Button variant="outline" size="sm" className="text-[#0f0f0f] border-white hover:bg-white hover:text-[#b88424]" onClick={() => handleViewMovie(movie.id)}>
                       <Eye className="mr-2 h-4 w-4" />
                       View Movie
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-white border-white hover:bg-white hover:text-black"
-                      onClick={() => handleViewShowtimes(movie.id)}
-                    >
+                    <Button variant="outline" size="sm" className="text-[#0f0f0f] border-white hover:bg-white hover:text-[#b88424]" onClick={() => handleViewShowtimes(movie.id)}>
                       <Calendar className="mr-2 h-4 w-4" />
                       View Showtimes
                     </Button>
