@@ -7,21 +7,22 @@ import { Button } from "@/components/ui/button";
 
 const slides = [
   {
-    image: "https://assets.voxcinemas.com/content/Marco_1735722489.jpg",
+    image:
+      "https://m.media-amazon.com/images/M/MV5BMjI4MzU5NTExNF5BMl5BanBnXkFtZTgwNzY1MTEwMDI@._V1_.jpg",
     alt: "Movie 1",
     title: "Blockbuster Hit",
     description: "Experience the action-packed adventure of the year!",
   },
   {
     image:
-      "https://assets.voxcinemas.com/content/Sonic-MP-SHARE--_1735197591.jpg",
+      "https://m.media-amazon.com/images/M/MV5BMjQ0MTgyNjAxMV5BMl5BanBnXkFtZTgwNjUzMDkyODE@._V1_.jpg",
     alt: "Movie 2",
     title: "Romantic Comedy",
     description: "Fall in love with the most heartwarming story of the season.",
   },
   {
     image:
-      "https://assets.voxcinemas.com/content/DOT2_En_880x440-100_1735912459.jpg",
+      "https://res.cloudinary.com/isiagi/image/upload/v1738801026/t9vztgetn74d0suovsny.jpg",
     alt: "Movie 3",
     title: "Sci-Fi Thriller",
     description: "Journey to the unknown in this mind-bending space odyssey.",

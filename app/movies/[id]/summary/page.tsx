@@ -46,7 +46,7 @@ export default function BookingSummaryPage() {
   const [movieDetails, setMovieDetails] = useState<any>({});
   const [selectedEats, setSelectedEats] = useState<Record<string, number>>({});
   const [color, setColor] = useState<string>("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const [user, setUser] = useState<any>({});
   const access_token = localStorage.getItem("access_token");
@@ -184,23 +184,20 @@ export default function BookingSummaryPage() {
         showing: movieDetails.showId,
       };
 
-      await axiosInstance.post("orders/orders/",
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      await axiosInstance.post("orders/orders/", payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
 
       setColor("success");
-      setLoading(false)
+      setLoading(false);
       setPopupMessage("Order placed successfully!");
-      router.push('/movies');
+      router.push("/orders");
     } catch (error: any) {
-      setLoading(false)
+      setLoading(false);
       console.error(
         "Error creating order:",
         error.response?.data || error.message
@@ -370,10 +367,19 @@ export default function BookingSummaryPage() {
 
       {/* Payment Button */}
       {popupMessage && (
-        <PopupMessage color={color} message={popupMessage} onClose={() => setPopupMessage("")} />
+        <PopupMessage
+          color={color}
+          message={popupMessage}
+          onClose={() => setPopupMessage("")}
+        />
       )}
       <div className="mt-8 flex justify-end">
-        <Button size="lg" className="w-full md:w-auto" onClick={handlePayment} disabled={loading}>
+        <Button
+          size="lg"
+          className="w-full md:w-auto"
+          onClick={handlePayment}
+          disabled={loading}
+        >
           {loading ? "Processing....." : "Proceed to Payment"}
         </Button>
       </div>
