@@ -31,7 +31,6 @@ export default function AuthModal({ isOpen, onClose }: any) {
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [color, setColor] = useState<string>("");
-  const [bgColor, setBgColor] = useState<string>("");
   const [popupMessage, setPopupMessage] = useState("");
 
   // Handle input changes
@@ -86,11 +85,11 @@ export default function AuthModal({ isOpen, onClose }: any) {
         setPopupMessage("Registration successful.");
       }
 
-      setColor("#62a03f");
-      setBgColor("#111827");
+      setColor("success");
       setTimeout(() => onClose(), 1000);
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: any) {
+      setColor("error");
+      console.error("Error:", error.response.data);
       setErrors((prev) => ({
         ...prev,
         email: "Invalid credentials or server error",
@@ -297,12 +296,7 @@ export default function AuthModal({ isOpen, onClose }: any) {
       </Dialog>
 
       {popupMessage && (
-        <PopupMessage
-          color={color}
-          bgColor={bgColor}
-          message={popupMessage}
-          onClose={() => setPopupMessage("")}
-        />
+        <PopupMessage color={color} message={popupMessage} onClose={() => setPopupMessage("")} />
       )}
     </>
   );

@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable prefer-const */
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -16,19 +15,12 @@ interface Seat {
   price: number;
 }
 
-// interface SeatRow {
-//   row: string;
-//   seats: Seat[];
-// }
-
-// Generate seats based on the specific arrangement and price
 const generateSeats = (basePrice: number = 10.0) => {
   const rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-  let seats: any = [];
+  const seats: any = [];
 
   rows.forEach((row, rowIndex) => {
     if (rowIndex === 0) {
-      // First row: 5 pairs of seats (10 total)
       for (let pair = 0; pair < 5; pair++) {
         for (let seatInPair = 0; seatInPair < 2; seatInPair++) {
           const seatNumber = pair * 2 + seatInPair + 1;
@@ -36,13 +28,12 @@ const generateSeats = (basePrice: number = 10.0) => {
             id: `${row}${seatNumber}`,
             row,
             number: seatNumber,
-            isAvailable: true, // 80% chance of being available
-            price: basePrice * 1.2, // Slightly higher price for the first row
+            isAvailable: true,
+            price: basePrice * 1.2,
           });
         }
       }
     } else if (rowIndex < 8) {
-      // Rows B-H: 3 pairs of seats + 1 single seat (7 total)
       for (let seatNumber = 1; seatNumber <= 7; seatNumber++) {
         seats.push({
           id: `${row}${seatNumber}`,
@@ -53,7 +44,6 @@ const generateSeats = (basePrice: number = 10.0) => {
         });
       }
     } else {
-      // Rows I-J: 7 seats with a space at position 4
       for (let seatNumber = 1; seatNumber <= 7; seatNumber++) {
         seats.push({
           id: `${row}${seatNumber}`,
@@ -76,6 +66,7 @@ export default function BookPage() {
   const [seats, setSeats] = useState(generateSeats());
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [takenSeats, setTakenSeats] = useState<string[]>([]);
+  const [loadingSeats, setLoadingSeats] = useState(true);
 
   const movieId = params.id as string;
   const date = searchParams.get("date");
@@ -84,7 +75,7 @@ export default function BookPage() {
 
   const toggleSeat = (seatId: string) => {
     const seat = seats.find((s: any) => s.id === seatId);
-    if (seat && seat.isAvailable) {
+    if (seat && seat.isAvailable && !takenSeats.includes(seatId)) {
       setSelectedSeats((prev) =>
         prev.includes(seatId)
           ? prev.filter((id) => id !== seatId)
@@ -94,58 +85,39 @@ export default function BookPage() {
   };
 
   useEffect(() => {
-    // Function to fetch movie showtimes
     const fetchMovieShowtimes = async () => {
       try {
-        // Fetch showtimes for the specific movie
         const response = await axiosInstance.get(
           `showings/showings/movie/${movieId}/`
         );
-
-        // Get the base price from the response, or use a default
         const basePrice = response.data[0].price
           ? Number.parseFloat(response.data[0].price)
           : 10.0;
-
-        // Generate seats with the fetched price
         const generatedSeats = generateSeats(basePrice);
         setSeats(generatedSeats);
       } catch (error) {
-        // console.error("Error fetching showtimes:", error);
         console.log(error);
-
-        // Fallback to default seats if fetch fails
         setSeats(generateSeats());
       }
     };
 
     const movie_orders = () => {
       const show_id = localStorage.getItem("show_id");
-
       axiosInstance
-        .get(`orders/orders/booked-seats/${show_id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        })
+        .get(`orders/orders/booked-seats/${show_id}`)
         .then((response) => {
-          // const formattedSeats = response.data.booked_seats.map((seat: string) => ({
-          //   row: seat.charAt(0),
-          //   column: parseInt(seat.slice(1), 10)
-          // }));
-
+          setLoadingSeats(false);
           setTakenSeats(response.data.booked_seats);
         })
         .catch(() => {
+          setLoadingSeats(false);
           setTakenSeats([]);
         });
     };
 
-    // Call the fetch function
     fetchMovieShowtimes();
     movie_orders();
 
-    // If editing seats, set the selected seats
     if (editSeats) {
       setSelectedSeats(editSeats.split(","));
     }
@@ -163,7 +135,6 @@ export default function BookPage() {
     return total + (seat?.price || 0);
   }, 0);
 
-  // Group seats by row for easier rendering
   const seatsByRow = seats.reduce((acc: any, seat: any) => {
     if (!acc[seat.row]) {
       acc[seat.row] = [];
@@ -171,6 +142,14 @@ export default function BookPage() {
     acc[seat.row].push(seat);
     return acc;
   }, {} as Record<string, Seat[]>);
+
+  if (loadingSeats) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin w-16 h-16 text-blue-500">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4">
@@ -180,19 +159,15 @@ export default function BookPage() {
       </p>
 
       <div className="mb-8 overflow-x-auto">
-        {/* Screen */}
         <div className="w-full h-8 bg-gray-300 rounded-t-lg mb-12 text-center text-sm leading-8">
           Screen
         </div>
 
-        {/* Seating Area */}
         <div className="space-y-4 min-w-max">
           {Object.entries(seatsByRow).map(([row, rowSeats]: any): any => (
             <div key={row} className="flex items-center">
-              {/* Row Label */}
               <div className="w-8 text-center font-bold">{row}</div>
 
-              {/* Seats */}
               <div
                 className={cn(
                   "flex",
@@ -215,7 +190,7 @@ export default function BookPage() {
                         >
                           <div key={seat.id} className="w-8 h-8 rounded-t-lg" />
                         </div>
-                      ); // Empty space for seat 4
+                      );
                     }
 
                     return (
@@ -253,7 +228,6 @@ export default function BookPage() {
         </Button>
       </div>
 
-      {/* Legend */}
       <div className="flex justify-center space-x-8">
         <div className="flex items-center">
           <div className="w-4 h-4 bg-blue-500 rounded-t-sm mr-2"></div>
@@ -292,7 +266,7 @@ function SeatButton({ seat, isSelected, onToggle, isBooked }: SeatButtonProps) {
         isBooked && "bg-gray-300 cursor-not-allowed hover:bg-gray-300"
       )}
       onClick={() => onToggle(seat.id)}
-      disabled={!seat.isAvailable || isSelected || isBooked}
+      disabled={!seat.isAvailable || isBooked}
     >
       {seat.number}
     </button>

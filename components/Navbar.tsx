@@ -7,9 +7,9 @@ import { Film, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MovieSearch from "./MovieSearch";
 import AuthModal from "./signinup";
-import axios from "axios";
 import PopupMessage from "./popup";
 import axiosInstance from "@/lib/axios";
+import axios from "axios";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -18,7 +18,6 @@ export default function Navbar() {
   const [openUp, setOpenUp] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [color, setColor] = useState<string>("");
-  const [bgColor, setBgColor] = useState<string>("");
   const [popupMessage, setPopupMessage] = useState("");
   const [tokens, setTokens] = useState<{
     access_token: string | null;
@@ -40,23 +39,19 @@ export default function Navbar() {
     const getUserProfile = () => {
       if (!tokens.access_token) return;
 
-      const config = {
-        method: "get",
-        maxBodyLength: Infinity,
-        url: "http://127.0.0.1:8000/auth/profile/",
-        headers: {
-          Authorization: `Bearer ${tokens.access_token}`,
-        },
-      };
-
-      axios
-        .request(config)
+      axiosInstance
+        .get("auth/profile/", {
+          headers: {
+            Authorization: `Bearer ${tokens.access_token}`,
+          },
+          // withCredentials: true,
+        })
         .then((response) => {
           setUser(response.data);
         })
-        .catch((error) => {
+        .catch(() => {
           setUser({});
-          console.log(error.response?.data);
+          // console.log(error.response?.data);
         });
     };
 
@@ -75,31 +70,19 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     if (!tokens.refresh_token) {
-      setColor("red-800");
-      setBgColor("red-200");
+      setColor("error");
       setPopupMessage("No refresh token found.");
       return;
     }
 
     try {
-      // await axios.post(
-      //   "http://127.0.0.1:8000/auth/logout/",
-      //   {},
-      //   {
-      //     headers: {
-      //       refresh: tokens.refresh_token,
-      //       access: tokens.access_token,
-      //     },
-      //   }
-      // );
-
-      await axiosInstance.post(
-        "auth/logout/",
-        {},
+      await axios.post(
+        "http://127.0.0.1:8000/auth/logout/",
+        { refresh: tokens.refresh_token },
         {
           headers: {
-            refresh: tokens.refresh_token,
-            access: tokens.access_token,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokens.access_token}`,
           },
         }
       );
@@ -116,12 +99,15 @@ export default function Navbar() {
       setUser({});
       setIsDropdownOpen(false);
 
-      setColor("green-800");
-      setBgColor("green-200");
+      setColor("success");
       setPopupMessage("Logout successful");
     } catch (error: any) {
+      setColor("error");
+      console.log(error);
+      setPopupMessage("Logout failed");
+
       setUser({});
-      console.log("Logout failed", error.response?.data);
+      // console.log("Logout failed", error);
     }
   };
 
@@ -270,7 +256,6 @@ export default function Navbar() {
       {popupMessage && (
         <PopupMessage
           color={color}
-          bgColor={bgColor}
           message={popupMessage}
           onClose={() => setPopupMessage("")}
         />

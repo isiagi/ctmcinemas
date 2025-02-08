@@ -6,6 +6,7 @@ import axiosInstance from "@/lib/axios";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
+import Image from "next/image";
 
 interface Order {
   id: string;
@@ -15,9 +16,11 @@ interface Order {
     movie: string;
     date: string;
     time: string;
+    poster_path?: string; // Add poster path to the interface
   };
   seats: string[];
   eats: string;
+  movie_image: string;
   total_price: number;
   created_at: string;
   updated_at: string;
@@ -48,6 +51,7 @@ export default function OrdersPage() {
       );
 
       setOrders(response.data || []);
+      console.log(response.data);
     } catch (err) {
       setError("Failed to fetch orders");
       console.error(err);
@@ -71,15 +75,12 @@ export default function OrdersPage() {
         },
       });
 
-      // Refresh orders after deletion
       fetchOrders();
     } catch (err) {
       console.error("Failed to delete order:", err);
-      // You might want to show a toast notification here
     }
   };
 
-  // Parse eats string into an array of items
   const parseEats = (eatsString: string) => {
     if (!eatsString) return [];
     return eatsString.split(",").map((item) => {
@@ -125,36 +126,51 @@ export default function OrdersPage() {
           {orders.map((order: Order) => (
             <div
               key={order.id}
-              className="bg-white shadow-md rounded-lg p-6 relative"
+              className="bg-white shadow-md rounded-lg p-6 relative flex gap-6"
             >
-              <Button
-                variant="ghost"
-                className="absolute top-4 right-4 text-red-600 hover:text-red-800 hover:bg-red-100"
-                onClick={() => handleDeleteOrder(order.id)}
-              >
-                <Trash2 className="h-5 w-5" />
-              </Button>
-              <h2 className="text-xl font-semibold mb-4">
-                {order.showing_details.movie}
-              </h2>
-              <p>
-                Date:{" "}
-                {new Date(order.showing_details.date).toLocaleDateString()}
-              </p>
-              <p>Time: {order.showing_details.time}</p>
-              <p>Seats: {order.seats.join(", ")}</p>
-              <p>
-                Eats:{" "}
-                {parseEats(order.eats)
-                  .map((item) => `${item.name} (${item.quantity})`)
-                  .join(", ")}
-              </p>
-              <p className="font-bold mt-2">
-                Total Price: {order.total_price.toLocaleString()} UGX
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                Ordered on: {new Date(order.created_at).toLocaleString()}
-              </p>
+              {/* Movie Poster */}
+              <div className="flex-shrink-0 w-32 h-48 relative">
+                {
+                  <Image
+                    src={order.movie_image}
+                    alt={`${order.showing_details.movie} poster`}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                }
+              </div>
+
+              {/* Order Details */}
+              <div className="flex-grow">
+                <Button
+                  variant="ghost"
+                  className="absolute top-4 right-4 text-red-600 hover:text-red-800 hover:bg-red-100"
+                  onClick={() => handleDeleteOrder(order.id)}
+                >
+                  <Trash2 className="h-5 w-5" />
+                </Button>
+                <h2 className="text-xl font-semibold mb-4">
+                  {order.showing_details.movie}
+                </h2>
+                <p>
+                  Date:{" "}
+                  {new Date(order.showing_details.date).toLocaleDateString()}
+                </p>
+                <p>Time: {order.showing_details.time}</p>
+                <p>Seats: {order.seats.join(", ")}</p>
+                <p>
+                  Eats:{" "}
+                  {parseEats(order.eats)
+                    .map((item) => `${item.name} (${item.quantity})`)
+                    .join(", ")}
+                </p>
+                <p className="font-bold mt-2">
+                  Total Price: {order.total_price.toLocaleString()} UGX
+                </p>
+                <p className="text-sm text-gray-500 mt-2">
+                  Ordered on: {new Date(order.created_at).toLocaleString()}
+                </p>
+              </div>
             </div>
           ))}
         </div>

@@ -46,7 +46,7 @@ export default function BookingSummaryPage() {
   const [movieDetails, setMovieDetails] = useState<any>({});
   const [selectedEats, setSelectedEats] = useState<Record<string, number>>({});
   const [color, setColor] = useState<string>("");
-  const [bgColor, setBgColor] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const [user, setUser] = useState<any>({});
   const access_token = localStorage.getItem("access_token");
@@ -164,16 +164,14 @@ export default function BookingSummaryPage() {
   const handlePayment = async () => {
     try {
       if (!user || !user.is_active) {
-        setColor("#960000");
-        setBgColor("#111827");
+        setColor("success");
         setPopupMessage("You need to sign in to make your payment.");
         return;
       }
 
       const accessToken = localStorage.getItem("access_token");
       if (!accessToken) {
-        setColor("#960000");
-        setBgColor("#111827");
+        setColor("error");
         setPopupMessage("You are not authenticated. Please sign in again.");
         return;
       }
@@ -186,30 +184,25 @@ export default function BookingSummaryPage() {
         showing: movieDetails.showId,
       };
 
-      console.log(payload, "payload");
+      await axiosInstance.post("orders/orders/", payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
 
-      await axios.post(
-        "https://cinema-vmbf.onrender.com/orders/orders/",
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
-
-      setColor("#62a03f");
-      setBgColor("#111827");
+      setColor("success");
+      setLoading(false);
       setPopupMessage("Order placed successfully!");
+      router.push("/orders");
     } catch (error: any) {
+      setLoading(false);
       console.error(
         "Error creating order:",
         error.response?.data || error.message
       );
-      setColor("#960000");
-      setBgColor("#111827");
+      setColor("error");
       setPopupMessage("An error occurred. Please try again.");
       // alert(error.response?.data?.message || "An error occurred. Please try again.");
     }
@@ -218,7 +211,7 @@ export default function BookingSummaryPage() {
   if (loader) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
-        Loading...
+        <div className="animate-spin w-16 h-16 text-blue-500">Loading...</div>
       </div>
     );
   }
@@ -376,14 +369,18 @@ export default function BookingSummaryPage() {
       {popupMessage && (
         <PopupMessage
           color={color}
-          bgColor={bgColor}
           message={popupMessage}
           onClose={() => setPopupMessage("")}
         />
       )}
       <div className="mt-8 flex justify-end">
-        <Button size="lg" className="w-full md:w-auto" onClick={handlePayment}>
-          Proceed to Payment
+        <Button
+          size="lg"
+          className="w-full md:w-auto"
+          onClick={handlePayment}
+          disabled={loading}
+        >
+          {loading ? "Processing....." : "Proceed to Payment"}
         </Button>
       </div>
     </div>
