@@ -80,7 +80,10 @@ export default function MovieSearch() {
 
   const handleFindAndBook = () => {
     if (selectedMovie) {
-      const movieSlug = selectedMovie.toLowerCase().replace(/ /g, "-");
+      const movieSlug = selectedMovie
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-") // Replace any non-alphanumeric characters (including :) with -
+        .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
       router.push(`/movies/${movieSlug}`);
     }
   };
