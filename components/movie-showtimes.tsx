@@ -106,8 +106,12 @@ export default function MovieShowtimes({ movie }: any) {
   };
 
   const handleBookNow = (showtime: string) => {
+    console.log(showtime, "showtime");
+    // set showtime id to localstorage
+    localStorage.setItem("showtimeId", showtime.id);
+
     router.push(
-      `/movies/${movie?.id}/book?date=${selectedDay}&time=${showtime}`
+      `/movies/${movie?.id}/book?date=${selectedDay}&time=${showtime.time}`
     );
   };
 
@@ -228,10 +232,7 @@ export default function MovieShowtimes({ movie }: any) {
                         <Popcorn className="h-4 w-4 ml-1" />
                       )}
                     </span>
-                    <Button
-                      size="sm"
-                      onClick={() => handleBookNow(showtime.time)}
-                    >
+                    <Button size="sm" onClick={() => handleBookNow(showtime)}>
                       <Clock className="mr-2 h-4 w-4" /> Book Now
                     </Button>
                   </div>

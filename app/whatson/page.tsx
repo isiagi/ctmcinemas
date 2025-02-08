@@ -32,7 +32,7 @@ function Page() {
     window.location.href = `/movies/${movieId}?scrollToShowtimes=true`;
   };
   return (
-    <div>
+    <div className="bg-white">
       <div className="relative h-[300px] w-full">
         <Image
           src="https://media.istockphoto.com/id/1479991868/photo/theater-coming-soontext-background-3d-rendering.webp?a=1&b=1&s=612x612&w=0&k=20&c=Ui59IrxcxOQ4P6zAAJevjAOH9ukboeMg3Srk9vcEEDk="

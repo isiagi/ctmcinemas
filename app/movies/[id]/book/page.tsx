@@ -120,7 +120,7 @@ export default function BookPage() {
     };
 
     const movie_orders = () => {
-      const show_id = localStorage.getItem("show_id");
+      const show_id = localStorage.getItem("showtimeId");
 
       axiosInstance
         .get(`orders/orders/booked-seats/${show_id}`, {

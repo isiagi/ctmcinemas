@@ -41,7 +41,7 @@ export function WhatsOn() {
   }, []);
 
   return (
-    <section className="bg-black">
+    <section className="bg-gray-700">
       <div className="max-w-[1400px] mx-auto py-16 px-4 md:px-16">
         <h2 className="text-3xl font-bold mb-8 text-center text-white">
           What&apos;s On
@@ -73,7 +73,7 @@ export function WhatsOn() {
                   <p className="text-gray-300 mb-4">{movie.description}</p>
                   <Button
                     variant="outline"
-                    className="w-full md:w-auto text-white border-white hover:bg-white hover:text-black"
+                    className="w-full md:w-auto text-white bg-cyan-400 border-white hover:bg-white hover:text-black"
                   >
                     Book Now
                   </Button>
@@ -88,7 +88,7 @@ export function WhatsOn() {
             variant="outline"
             size="lg"
             onClick={() => router.push("/movies")}
-            className="text-white border-white hover:bg-white hover:text-black"
+            className="text-white bg-cyan-400 border-white hover:bg-white hover:text-black"
           >
             View All Movies
           </Button>
