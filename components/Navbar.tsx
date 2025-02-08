@@ -77,7 +77,7 @@ export default function Navbar() {
 
     try {
       await axios.post(
-        "http://127.0.0.1:8000/auth/logout/",
+        "https://cinema-vmbf.onrender.com/auth/logout/",
         { refresh: tokens.refresh_token },
         {
           headers: {

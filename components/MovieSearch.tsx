@@ -5,7 +5,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 // import { movies } from "@/lib/movies";
 import axiosInstance from "@/lib/axios";
@@ -27,7 +26,7 @@ export default function MovieSearch() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredMovies, setFilteredMovies] = useState<any>([]);
-  const [selectedMovies, setSelectedMovies] = useState<any[]>([]);
+  const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [allMovies, setAllMovies] = useState<String[]>();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -76,14 +75,12 @@ export default function MovieSearch() {
   }, []);
 
   const handleMovieToggle = (movie: string) => {
-    setSelectedMovies((prev) =>
-      prev.includes(movie) ? prev.filter((m) => m !== movie) : [...prev, movie]
-    );
+    setSelectedMovie(movie === selectedMovie ? null : movie);
   };
 
   const handleFindAndBook = () => {
-    if (selectedMovies.length > 0) {
-      const movieSlug = selectedMovies[0].toLowerCase().replace(/ /g, "-");
+    if (selectedMovie) {
+      const movieSlug = selectedMovie.toLowerCase().replace(/ /g, "-");
       router.push(`/movies/${movieSlug}`);
     }
   };
@@ -110,10 +107,12 @@ export default function MovieSearch() {
                 key={movie}
                 className="flex items-center space-x-2 p-2 hover:bg-gray-600"
               >
-                <Checkbox
+                <input
+                  type="radio"
                   id={movie}
-                  checked={selectedMovies.includes(movie)}
-                  onCheckedChange={() => handleMovieToggle(movie)}
+                  checked={selectedMovie === movie}
+                  onChange={() => handleMovieToggle(movie)}
+                  className="text-blue-500 focus:ring-blue-500"
                 />
                 <label
                   htmlFor={movie}
@@ -128,10 +127,10 @@ export default function MovieSearch() {
       </div>
       <Button
         onClick={handleFindAndBook}
-        disabled={selectedMovies.length === 0}
+        disabled={!selectedMovie}
         className="w-full sm:w-auto"
       >
-        Find Times & Book ({selectedMovies.length})
+        Find Times & Book {selectedMovie ? "(1)" : "(0)"}
       </Button>
     </div>
   );
