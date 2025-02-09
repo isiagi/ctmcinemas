@@ -6,6 +6,7 @@ import {
   Mail,
   Phone,
   MapPin,
+  MessageCircle,
 } from "lucide-react";
 
 export function Footer() {
@@ -108,21 +109,32 @@ export function Footer() {
             <div className="flex space-x-4">
               <Link
                 href="https://www.facebook.com/profile.php?id=61568398119994&mibextid=ZbWKwL"
+                target="_blank"
                 className="hover:text-white transition-colors"
               >
                 <Facebook />
               </Link>
               <Link
                 href="https://www.instagram.com/emtcinemas?igsh=MWdnaDd0MXF5bGcwZQ=="
+                target="_blank"
                 className="hover:text-white transition-colors"
               >
                 <Instagram />
               </Link>
               <Link
                 href="https://x.com/emtcinemas?t=lAI3J827gaZbDJt_am74vA&s=09"
+                target="_blank"
                 className="hover:text-white transition-colors"
               >
                 <Twitter />
+              </Link>
+              {/* whatsapp */}
+              <Link
+                href="https://whatsapp.com/channel/0029VazXqDMFXUuYpvHJBw3U"
+                target="_blank"
+                className="hover:text-white transition-colors"
+              >
+                <MessageCircle />
               </Link>
             </div>
           </div>

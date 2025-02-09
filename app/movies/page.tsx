@@ -12,6 +12,7 @@ import axiosInstance from "@/lib/axios";
 export default function MoviesPage() {
   const router = useRouter();
   const [movies, setMovies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const handleViewMovie = (movieId: string) => {
     router.push(`/movies/${movieId}`);
@@ -22,6 +23,7 @@ export default function MoviesPage() {
   };
 
   const getMoviesFromAPI = async () => {
+    setLoading(true);
     await axiosInstance
       .get("movies/movies/")
       .then((response) => {
@@ -40,8 +42,16 @@ export default function MoviesPage() {
     getMoviesFromAPI();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-gray-900 min-h-screen">
       <div className="max-w-[1400px] mx-auto py-16 px-4 md:px-16">
         <h1 className="text-4xl font-bold mb-8 text-center text-white">
           All Movies
@@ -62,11 +72,21 @@ export default function MoviesPage() {
                   <h2 className="text-2xl font-bold mb-2">{movie.title}</h2>
                   <p className="mb-6 text-lg">{movie.description}</p>
                   <div className="flex space-x-4">
-                    <Button variant="outline" size="sm" className="text-[#0f0f0f] border-white hover:bg-white hover:text-[#b88424]" onClick={() => handleViewMovie(movie.id)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-[#0f0f0f] border-white hover:bg-gray-900 hover:text-white"
+                      onClick={() => handleViewMovie(movie.id)}
+                    >
                       <Eye className="mr-2 h-4 w-4" />
                       View Movie
                     </Button>
-                    <Button variant="outline" size="sm" className="text-[#0f0f0f] border-white hover:bg-white hover:text-[#b88424]" onClick={() => handleViewShowtimes(movie.id)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-[#0f0f0f] border-white hover:bg-gray-900 hover:text-white"
+                      onClick={() => handleViewShowtimes(movie.id)}
+                    >
                       <Calendar className="mr-2 h-4 w-4" />
                       View Showtimes
                     </Button>

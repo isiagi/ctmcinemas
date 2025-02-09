@@ -58,23 +58,22 @@ const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 
 export default function ComingSoonPage() {
   const [selectedTrailer, setSelectedTrailer] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState<any[]>([]);
   const router = useRouter();
 
   const getMoviesFromAPI = async () => {
-    await axiosInstance
-      .get("movies/movies/by_status/?status=COMING_SOON")
-      .then((response) => {
-        // filter where status is "coming soon"
-        // const filteredMovies = response.data.filter(
-        //   (movie: any) => movie.status === "COMING_SOON"
-        // );
-        setMovies(response.data);
-      })
-      .catch((error) => {
-        setMovies([]);
-        console.error("No movies found because of: ", error);
-      });
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        "movies/movies/by_status/?status=Coming_Soon"
+      );
+      setMovies(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -97,6 +96,12 @@ export default function ComingSoonPage() {
           </h1>
         </div>
       </div>
+
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+        </div>
+      ) : null}
 
       {/* Movies Grid */}
       <div className="max-w-7xl mx-auto px-4 py-12">

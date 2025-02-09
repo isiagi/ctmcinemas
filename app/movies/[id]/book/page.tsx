@@ -148,15 +148,15 @@ export default function BookPage() {
 
   if (loadingSeats) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin w-16 h-16 text-blue-500">Loading...</div>
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
       </div>
     );
   }
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-4">Select Your Seakkts</h1>
+      <h1 className="text-3xl font-bold mb-4">Select Your Seats</h1>
       <p className="mb-4">
         Movie: {movieId}, Date: {date}, Time: {time}
       </p>

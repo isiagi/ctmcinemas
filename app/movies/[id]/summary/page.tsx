@@ -35,6 +35,8 @@ interface PaymentResponse {
   status: string;
   transaction_id?: string;
   error?: string;
+  phoneNumber?: string;
+  provider?: string;
 }
 
 interface PaymentModalProps {
@@ -88,6 +90,8 @@ export default function BookingSummaryPage() {
 
       setShowPaymentModal(true);
     } catch (error: any) {
+      console.log(error);
+
       setLoading(false);
       setColor("error");
       setPopupMessage("An error occurred. Please try again.");
@@ -96,52 +100,62 @@ export default function BookingSummaryPage() {
 
   const handlePaymentComplete = async (paymentResponse: PaymentResponse) => {
     try {
+      setLoading(true);
+
       const payload = {
-        user: user.id,
         total_price: calculateTotal(),
-        eats,
-        seats,
+        eats: eats,
+        seats: seats,
         showing: movieDetails.showId,
         payment: {
           phone_number: paymentResponse.phoneNumber,
-          provider: paymentResponse.provider,
+          provider: paymentResponse.provider?.toUpperCase(), // Ensure provider is uppercase for backend
         },
       };
 
-      console.log(payload);
+      console.log("Sending payload:", payload);
 
       const response = await axiosInstance.post("orders/orders/", payload, {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
         },
-        withCredentials: true,
       });
 
-      if (response.data.payment.status === "pending") {
-        setColor("success");
-        setPopupMessage(
-          "Payment initiated! Please check your phone to complete the transaction."
-        );
+      console.log("Response:", response.data);
+
+      // Handle redirect URL from Flutterwave
+      if (response.data?.payment?.instructions?.redirect) {
+        // Open the redirect URL in a new window/tab
+        window.open(response.data.payment.instructions.redirect, "_blank");
 
         // Start polling for payment verification
-        startPaymentVerification(response.data.order.id);
+        if (response.data.order && response.data.order.id) {
+          setColor("success");
+          setPopupMessage(
+            "Please complete the payment in the new window and wait for confirmation."
+          );
+          startPaymentVerification(response.data.order.id);
+        }
       } else {
-        throw new Error("Payment initiation failed");
+        throw new Error("No payment redirect URL received");
       }
     } catch (error: any) {
+      console.error("Order creation error:", error);
       setColor("error");
       setPopupMessage(
-        error.response?.data?.error || "Payment failed. Please try again."
+        error.response?.data?.error ||
+          "Payment initiation failed. Please try again."
       );
     } finally {
+      setLoading(false);
       setShowPaymentModal(false);
     }
   };
 
   const startPaymentVerification = async (orderId: string) => {
     let attempts = 0;
-    const maxAttempts = 10;
+    const maxAttempts = 20; // Increased attempts due to manual verification
     const interval = setInterval(async () => {
       try {
         const response = await axiosInstance.post(
@@ -160,17 +174,19 @@ export default function BookingSummaryPage() {
           setPopupMessage("Payment successful! Redirecting to orders...");
           setTimeout(() => router.push("/orders"), 2000);
         }
-      } catch (error) {
+      } catch (error: any) {
+        console.error("Payment verification error:", error);
         attempts++;
         if (attempts >= maxAttempts) {
           clearInterval(interval);
           setColor("error");
           setPopupMessage(
-            "Payment verification timed out. Please check your order status."
+            "Payment verification timed out. Please check your order status in the orders page."
           );
+          setTimeout(() => router.push("/orders"), 3000);
         }
       }
-    }, 5000); // Poll every 5 seconds
+    }, 5000);
   };
 
   const getMovieDetails = async () => {
@@ -326,8 +342,8 @@ export default function BookingSummaryPage() {
 
   if (loader) {
     return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <div className="animate-spin w-16 h-16 text-blue-500">Loading...</div>
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
       </div>
     );
   }
@@ -529,7 +545,9 @@ const PaymentModal = ({
         phoneNumber,
         provider,
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.log(error);
+
       onPaymentComplete({
         status: "error",
         error: "Payment failed. Please try again.",

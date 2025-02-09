@@ -64,7 +64,7 @@ export function WhatsOn() {
                   <p className="text-gray-300 mb-4">{movie.description}</p>
                   <Button
                     variant="outline"
-                    className="w-full md:w-auto text-[#0f0f0f] border-white hover:text-white hover:bg-gray-900"
+                    className="w-full md:w-auto text-[#0f0f0f] border-white hover:text-white hover:bg-gray-900 transition-colors"
                     onClick={() => router.push(`/movies/${movie.id}`)}
                   >
                     Book Now
