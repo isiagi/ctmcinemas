@@ -10,21 +10,21 @@ const slides = [
     image:
       "https://m.media-amazon.com/images/M/MV5BMjI4MzU5NTExNF5BMl5BanBnXkFtZTgwNzY1MTEwMDI@._V1_.jpg",
     alt: "Movie 1",
-    title: "Blockbuster Hit",
+    title: "Moana",
     description: "Experience the action-packed adventure of the year!",
   },
   {
     image:
-      "https://m.media-amazon.com/images/M/MV5BMjQ0MTgyNjAxMV5BMl5BanBnXkFtZTgwNjUzMDkyODE@._V1_.jpg",
+      "https://res.cloudinary.com/isiagi/image/upload/v1738801024/m4st2smiuudiql3rjadq.jpg",
     alt: "Movie 2",
-    title: "Romantic Comedy",
+    title: "Captain America: New Brave World",
     description: "Fall in love with the most heartwarming story of the season.",
   },
   {
     image:
       "https://res.cloudinary.com/isiagi/image/upload/v1738801026/t9vztgetn74d0suovsny.jpg",
     alt: "Movie 3",
-    title: "Sci-Fi Thriller",
+    title: "Mufasa: The Lion King",
     description: "Journey to the unknown in this mind-bending space odyssey.",
   },
 ];

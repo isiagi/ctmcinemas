@@ -29,7 +29,7 @@ const generateSeats = (basePrice: number = 10.0) => {
             row,
             number: seatNumber,
             isAvailable: true,
-            price: basePrice * 1.2,
+            price: basePrice,
           });
         }
       }
@@ -90,6 +90,9 @@ export default function BookPage() {
         const response = await axiosInstance.get(
           `showings/showings/movie/${movieId}/`
         );
+
+        console.log(response.data, "response.data");
+
         const basePrice = response.data[0].price
           ? Number.parseFloat(response.data[0].price)
           : 10.0;
@@ -153,7 +156,7 @@ export default function BookPage() {
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-4">Select Your Seats</h1>
+      <h1 className="text-3xl font-bold mb-4">Select Your Seakkts</h1>
       <p className="mb-4">
         Movie: {movieId}, Date: {date}, Time: {time}
       </p>

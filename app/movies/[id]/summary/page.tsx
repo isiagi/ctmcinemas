@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -6,27 +7,41 @@ import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Edit2, Film, Calendar, Clock, Info, Utensils } from "lucide-react";
 import Image from "next/image";
-// import { movies } from "@/lib/movies";
-// import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import PopupMessage from "@/components/popup";
 import axiosInstance from "@/lib/axios";
-// import { auth } from "@clerk/nextjs/server";
-
-// interface MovieDetails {
-//   title: string;
-//   image: string;
-//   duration: string;
-//   rating: string;
-//   screen: string;
-//   price: number;
-//   type: string;
-// }
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 interface EatsItem {
   id: string;
   name: string;
   price: number;
+}
+
+interface PaymentResponse {
+  status: string;
+  transaction_id?: string;
+  error?: string;
+}
+
+interface PaymentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  amount: number;
+  onPaymentComplete: (response: PaymentResponse) => void;
 }
 
 const eatsItems: EatsItem[] = [
@@ -37,7 +52,6 @@ const eatsItems: EatsItem[] = [
 ];
 
 export default function BookingSummaryPage() {
-  // const { isLoaded, isSignedIn, userId } = auth();
   const [popupMessage, setPopupMessage] = useState("");
   const [loader, setLoader] = useState(true);
   const searchParams = useSearchParams();
@@ -47,15 +61,117 @@ export default function BookingSummaryPage() {
   const [selectedEats, setSelectedEats] = useState<Record<string, number>>({});
   const [color, setColor] = useState<string>("");
   const [loading, setLoading] = useState(false);
-
   const [user, setUser] = useState<any>({});
-  const access_token = localStorage.getItem("access_token");
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
+  const access_token = localStorage.getItem("access_token");
   const seats = searchParams.get("seats")?.split(",") || [];
   const date = searchParams.get("date");
   const time = searchParams.get("time");
   const movieId = params.id;
   const eats = searchParams.get("eats");
+
+  const handlePayment = async () => {
+    try {
+      if (!user || !user.is_active) {
+        setColor("error");
+        setPopupMessage("You need to sign in to make your payment.");
+        return;
+      }
+
+      const accessToken = localStorage.getItem("access_token");
+      if (!accessToken) {
+        setColor("error");
+        setPopupMessage("You are not authenticated. Please sign in again.");
+        return;
+      }
+
+      setShowPaymentModal(true);
+    } catch (error: any) {
+      setLoading(false);
+      setColor("error");
+      setPopupMessage("An error occurred. Please try again.");
+    }
+  };
+
+  const handlePaymentComplete = async (paymentResponse: PaymentResponse) => {
+    try {
+      const payload = {
+        user: user.id,
+        total_price: calculateTotal(),
+        eats,
+        seats,
+        showing: movieDetails.showId,
+        payment: {
+          phone_number: paymentResponse.phoneNumber,
+          provider: paymentResponse.provider,
+        },
+      };
+
+      console.log(payload);
+
+      const response = await axiosInstance.post("orders/orders/", payload, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      if (response.data.payment.status === "pending") {
+        setColor("success");
+        setPopupMessage(
+          "Payment initiated! Please check your phone to complete the transaction."
+        );
+
+        // Start polling for payment verification
+        startPaymentVerification(response.data.order.id);
+      } else {
+        throw new Error("Payment initiation failed");
+      }
+    } catch (error: any) {
+      setColor("error");
+      setPopupMessage(
+        error.response?.data?.error || "Payment failed. Please try again."
+      );
+    } finally {
+      setShowPaymentModal(false);
+    }
+  };
+
+  const startPaymentVerification = async (orderId: string) => {
+    let attempts = 0;
+    const maxAttempts = 10;
+    const interval = setInterval(async () => {
+      try {
+        const response = await axiosInstance.post(
+          `orders/orders/${orderId}/verify_order_payment/`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+
+        if (response.data.status === "Payment verified") {
+          clearInterval(interval);
+          setColor("success");
+          setPopupMessage("Payment successful! Redirecting to orders...");
+          setTimeout(() => router.push("/orders"), 2000);
+        }
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          clearInterval(interval);
+          setColor("error");
+          setPopupMessage(
+            "Payment verification timed out. Please check your order status."
+          );
+        }
+      }
+    }, 5000); // Poll every 5 seconds
+  };
 
   const getMovieDetails = async () => {
     try {
@@ -161,52 +277,52 @@ export default function BookingSummaryPage() {
     return seatsTotal + eatsTotal;
   };
 
-  const handlePayment = async () => {
-    try {
-      if (!user || !user.is_active) {
-        setColor("success");
-        setPopupMessage("You need to sign in to make your payment.");
-        return;
-      }
+  // const handlePaymentz = async () => {
+  //   try {
+  //     if (!user || !user.is_active) {
+  //       setColor("success");
+  //       setPopupMessage("You need to sign in to make your payment.");
+  //       return;
+  //     }
 
-      const accessToken = localStorage.getItem("access_token");
-      if (!accessToken) {
-        setColor("error");
-        setPopupMessage("You are not authenticated. Please sign in again.");
-        return;
-      }
+  //     const accessToken = localStorage.getItem("access_token");
+  //     if (!accessToken) {
+  //       setColor("error");
+  //       setPopupMessage("You are not authenticated. Please sign in again.");
+  //       return;
+  //     }
 
-      const payload = {
-        user: user.id,
-        total_price: calculateTotal(),
-        eats,
-        seats,
-        showing: movieDetails.showId,
-      };
+  //     const payload = {
+  //       user: user.id,
+  //       total_price: calculateTotal(),
+  //       eats,
+  //       seats,
+  //       showing: movieDetails.showId,
+  //     };
 
-      await axiosInstance.post("orders/orders/", payload, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+  //     await axiosInstance.post("orders/orders/", payload, {
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       withCredentials: true,
+  //     });
 
-      setColor("success");
-      setLoading(false);
-      setPopupMessage("Order placed successfully!");
-      router.push("/orders");
-    } catch (error: any) {
-      setLoading(false);
-      console.error(
-        "Error creating order:",
-        error.response?.data || error.message
-      );
-      setColor("error");
-      setPopupMessage("An error occurred. Please try again.");
-      // alert(error.response?.data?.message || "An error occurred. Please try again.");
-    }
-  };
+  //     setColor("success");
+  //     setLoading(false);
+  //     setPopupMessage("Order placed successfully!");
+  //     router.push("/orders");
+  //   } catch (error: any) {
+  //     setLoading(false);
+  //     console.error(
+  //       "Error creating order:",
+  //       error.response?.data || error.message
+  //     );
+  //     setColor("error");
+  //     setPopupMessage("An error occurred. Please try again.");
+  //     // alert(error.response?.data?.message || "An error occurred. Please try again.");
+  //   }
+  // };
 
   if (loader) {
     return (
@@ -383,6 +499,85 @@ export default function BookingSummaryPage() {
           {loading ? "Processing....." : "Proceed to Payment"}
         </Button>
       </div>
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        amount={calculateTotal()}
+        onPaymentComplete={handlePaymentComplete}
+      />
     </div>
   );
 }
+
+const PaymentModal = ({
+  isOpen,
+  onClose,
+  amount,
+  onPaymentComplete,
+}: PaymentModalProps) => {
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [provider, setProvider] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handlePayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      onPaymentComplete({
+        status: "success",
+        phoneNumber,
+        provider,
+      });
+    } catch (error) {
+      onPaymentComplete({
+        status: "error",
+        error: "Payment failed. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Mobile Money Payment</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handlePayment} className="space-y-4">
+          <div className="space-y-2">
+            <Select onValueChange={setProvider} value={provider}>
+              <SelectTrigger id="provider">
+                <SelectValue placeholder="Select provider" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="MTN">MTN Mobile Money</SelectItem>
+                <SelectItem value="AIRTEL">Airtel Money</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="Enter phone number"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span>Amount to Pay:</span>
+            <span className="font-bold">{amount.toLocaleString()} UGX</span>
+          </div>
+
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Processing..." : "Pay Now"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};

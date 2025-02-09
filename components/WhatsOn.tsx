@@ -32,7 +32,7 @@ export function WhatsOn() {
   }, []);
 
   return (
-    <section className="bg-black">
+    <section className="bg-gray-900">
       <div className="max-w-[1400px] mx-auto py-16 px-4 md:px-16">
         <h2 className="text-3xl font-bold mb-8 text-center text-white">
           What&apos;s On
@@ -47,7 +47,13 @@ export function WhatsOn() {
 
             return (
               <div key={index} className={`relative ${gridClass}`}>
-                <Image src={movie.image} alt={movie.title} fill className="object-cover" priority={index === 0} />
+                <Image
+                  src={movie.image}
+                  alt={movie.title}
+                  fill
+                  className="object-cover"
+                  priority={index === 0}
+                />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/90 p-8 flex flex-col justify-end">
                   <span className="text-cyan-400 text-sm font-medium mb-2">
                     {movie.highlight}
@@ -56,7 +62,11 @@ export function WhatsOn() {
                     {movie.title}
                   </h3>
                   <p className="text-gray-300 mb-4">{movie.description}</p>
-                  <Button variant="outline" className="w-full md:w-auto text-[#0f0f0f] border-white hover:bg-white hover:text-[#b88424]" onClick={() => router.push(`/movies/${movie.id}`)}>
+                  <Button
+                    variant="outline"
+                    className="w-full md:w-auto text-[#0f0f0f] border-white hover:text-white hover:bg-gray-900"
+                    onClick={() => router.push(`/movies/${movie.id}`)}
+                  >
                     Book Now
                   </Button>
                 </div>
@@ -66,7 +76,12 @@ export function WhatsOn() {
         </div>
 
         <div className="text-center mt-8">
-          <Button variant="outline" size="lg" onClick={() => router.push("/movies")} className="text-white border-white hover:bg-white hover:text-black">
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => router.push("/movies")}
+            className="text-black border-white hover:bg-white hover:text-white hover:bg-gray-900"
+          >
             View All Movies
           </Button>
         </div>
