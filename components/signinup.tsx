@@ -90,8 +90,10 @@ export default function AuthModal({ isOpen, onClose }: any) {
       setTimeout(() => onClose(), 1000);
     } catch (error: any) {
       setColor("error");
+
       // console.error("Error:", error.response.data);
       console.log(error);
+
 
       setErrors((prev) => ({
         ...prev,
@@ -301,11 +303,13 @@ export default function AuthModal({ isOpen, onClose }: any) {
       </Dialog>
 
       {popupMessage && (
+
         <PopupMessage
           color={color}
           message={popupMessage}
           onClose={() => setPopupMessage("")}
         />
+
       )}
     </>
   );

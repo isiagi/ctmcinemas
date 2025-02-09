@@ -15,7 +15,9 @@ const slides = [
   },
   {
     image:
+
       "https://res.cloudinary.com/isiagi/image/upload/v1738801024/m4st2smiuudiql3rjadq.jpg",
+
     alt: "Movie 2",
     title: "Captain America: New Brave World",
     description: "Fall in love with the most heartwarming story of the season.",

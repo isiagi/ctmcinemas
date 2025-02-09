@@ -7,7 +7,9 @@ const accessToken = localStorage.getItem("access_token");
 
 // Create axios instance with refresh token and access token in headers
 export const authInstance = axios.create({
+
   baseURL: "https://cinema-vmbf.onrender.com/",
+
   headers: {
     "Content-Type": "application/json",
     refresh: refreshToken,
