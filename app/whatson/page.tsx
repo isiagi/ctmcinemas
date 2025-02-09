@@ -9,6 +9,7 @@ import React from "react";
 
 function Page() {
   const [movies, setMovies] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchMovies = async () => {
@@ -16,10 +17,17 @@ function Page() {
       //     "http://127.0.0.1:8000/movies/movies/by_status/?status=NOW_SHOWING"
       //   );
       //   const data = await response.json();
-      const response = await axiosInstance.get(
-        "movies/movies/by_status/?status=NOW_SHOWING"
-      );
-      setMovies(response.data);
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(
+          "movies/movies/by_status/?status=Now_Showing"
+        );
+        setMovies(response.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchMovies();
   }, []);
@@ -31,11 +39,12 @@ function Page() {
   const handleViewShowtimes = (movieId: string) => {
     window.location.href = `/movies/${movieId}?scrollToShowtimes=true`;
   };
+
   return (
     <div>
       <div className="relative h-[300px] w-full">
         <Image
-          src="https://media.istockphoto.com/id/1479991868/photo/theater-coming-soontext-background-3d-rendering.webp?a=1&b=1&s=612x612&w=0&k=20&c=Ui59IrxcxOQ4P6zAAJevjAOH9ukboeMg3Srk9vcEEDk="
+          src="https://nsdt.org.uk/wp-content/uploads/2021/05/Whats-on.png"
           alt="Coming Soon Banner"
           fill
           className="object-cover"
@@ -46,6 +55,12 @@ function Page() {
           </h1>
         </div>
       </div>
+
+      {loading && (
+        <div className="flex items-center justify-center h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 p-12">
         {movies.map((movie: any) => (
@@ -64,7 +79,7 @@ function Page() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="text-white border-white hover:bg-white hover:text-black"
+                    className="text-[#0f0f0f] border-white hover:text-white hover:bg-gray-900 transition-colors"
                     onClick={() => handleViewMovie(movie.id)}
                   >
                     <Eye className="mr-2 h-4 w-4" />
@@ -73,7 +88,7 @@ function Page() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="text-white border-white hover:bg-white hover:text-black"
+                    className="text-[#0f0f0f] border-white hover:text-white hover:bg-gray-900 transition-colors"
                     onClick={() => handleViewShowtimes(movie.id)}
                   >
                     <Calendar className="mr-2 h-4 w-4" />

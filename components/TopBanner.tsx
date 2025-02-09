@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Facebook, Instagram, Twitter } from "lucide-react";
+import { Facebook, Instagram, Twitter, MessageCircle } from "lucide-react";
 
 export function TopBanner() {
   return (
@@ -28,6 +28,13 @@ export function TopBanner() {
             rel="noopener noreferrer"
           >
             <Twitter size={16} />
+          </Link>
+          <Link
+            href="https://whatsapp.com/channel/0029VazXqDMFXUuYpvHJBw3U"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <MessageCircle size={16} />
           </Link>
         </div>
       </div>

@@ -70,10 +70,11 @@ export default function AuthModal({ isOpen, onClose }: any) {
       let response;
       if (action === "login") {
         response = await login(formData.email, formData.password);
+
         setPopupMessage("Login successful.");
 
-        localStorage.setItem("access_token", response.data.access);
-        localStorage.setItem("refresh_token", response.data.refresh);
+        localStorage.setItem("access_token", response.access);
+        localStorage.setItem("refresh_token", response.refresh);
         setFormData({ email: "", password: "", username: "" });
         window.location.reload();
       } else if (action === "register") {
@@ -89,7 +90,11 @@ export default function AuthModal({ isOpen, onClose }: any) {
       setTimeout(() => onClose(), 1000);
     } catch (error: any) {
       setColor("error");
-      console.error("Error:", error.response.data);
+
+      // console.error("Error:", error.response.data);
+      console.log(error);
+
+
       setErrors((prev) => ({
         ...prev,
         email: "Invalid credentials or server error",
@@ -114,7 +119,9 @@ export default function AuthModal({ isOpen, onClose }: any) {
       console.log("Password reset email sent to:", resetEmail);
       setIsResetModalOpen(false);
     } catch (error) {
-      console.error("Error:", error);
+      // console.error("Error:", error);
+      console.log(error);
+
       setErrors({ ...errors, email: "Failed to send reset link" });
     } finally {
       setLoading(false);
@@ -296,7 +303,13 @@ export default function AuthModal({ isOpen, onClose }: any) {
       </Dialog>
 
       {popupMessage && (
-        <PopupMessage color={color} message={popupMessage} onClose={() => setPopupMessage("")} />
+
+        <PopupMessage
+          color={color}
+          message={popupMessage}
+          onClose={() => setPopupMessage("")}
+        />
+
       )}
     </>
   );

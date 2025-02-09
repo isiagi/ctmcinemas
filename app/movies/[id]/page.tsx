@@ -8,11 +8,13 @@ import axiosInstance from "@/lib/axios";
 
 export default function MoviePage() {
   const [movieData, setMovieData] = useState<MovieDetails | null>(null);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
+        setLoading(true);
         const response = await axiosInstance.get("movies/movies/");
         const movies: MovieDetails[] = response.data;
 
@@ -86,11 +88,21 @@ export default function MoviePage() {
         setMovieData({ ...movie, days });
       } catch (error) {
         console.error("No movies found because of: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchMovieData();
   }, [id]); // Fetch data when `id` changes
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   if (!movieData) {
     return <p className="text-center">Loading...</p>;

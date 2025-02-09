@@ -29,7 +29,9 @@ const generateSeats = (basePrice: number = 10.0) => {
             row,
             number: seatNumber,
             isAvailable: true,
-            price: basePrice * 1.2,
+
+            price: basePrice,
+
           });
         }
       }
@@ -90,6 +92,7 @@ export default function BookPage() {
         const response = await axiosInstance.get(
           `showings/showings/movie/${movieId}/`
         );
+
         const basePrice = response.data[0].price
           ? Number.parseFloat(response.data[0].price)
           : 10.0;
@@ -145,8 +148,10 @@ export default function BookPage() {
 
   if (loadingSeats) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin w-16 h-16 text-blue-500">Loading...</div>
+
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+
       </div>
     );
   }

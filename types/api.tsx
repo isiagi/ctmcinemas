@@ -1,9 +1,17 @@
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000/auth";
+const API_URL = "https://cinema-vmbf.onrender.com/auth";
 
 export const login = async (email: string, password: string) => {
-  return axios.post(`${API_URL}/login/`, { email, password });
+  try {
+    const response = await axios.post(`${API_URL}/login/`, {
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const register = async (userData: {
