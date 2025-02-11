@@ -212,36 +212,54 @@ export default function Navbar() {
             <Link
               href="/whatson"
               className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               What&apos;s On
             </Link>
             <Link
               href="/comingsoon"
               className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Coming Soon
             </Link>
             <Link
-              href="/eats"
+              href="/services"
               className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
-              Eats
+              Services
             </Link>
           </div>
           <div className="pt-4 pb-3 border-t border-gray-700">
             <div className="px-2 space-y-1">
-              <MovieSearch />
+              <MovieSearch setIsMobileMenuOpen={setIsMobileMenuOpen} />
               {user && user.is_active ? (
-                <div className="flex items-center px-3 py-2">
-                  <span className="text-gray-300 text-sm mr-2">
-                    Signed in as {user.name}
-                  </span>
+                <div>
+                  <div className="flex items-center px-3 py-2">
+                    <span className="text-gray-300 text-sm mr-2">
+                      Signed in as {user.name}
+                    </span>
+                  </div>
+                  <Link
+                    href="/orders"
+                    className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    orders
+                  </Link>
+                  <button
+                    className="block w-full text-center bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
                 </div>
               ) : (
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full text-white border-white hover:bg-white hover:text-gray-800"
+                  className="w-full text-black border-white hover:bg-white hover:text-gray-800"
                   onClick={() => setOpenUp(true)}
                 >
                   Sign In

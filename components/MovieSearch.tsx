@@ -22,7 +22,7 @@ import axiosInstance from "@/lib/axios";
 //   "Forrest Gump",
 // ];
 
-export default function MovieSearch() {
+export default function MovieSearch({ setIsMobileMenuOpen }: any) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredMovies, setFilteredMovies] = useState<any>([]);
@@ -79,6 +79,7 @@ export default function MovieSearch() {
   };
 
   const handleFindAndBook = () => {
+    setIsMobileMenuOpen(false);
     if (selectedMovie) {
       const movieSlug = selectedMovie
         .toLowerCase()

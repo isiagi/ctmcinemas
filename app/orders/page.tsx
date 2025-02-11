@@ -93,6 +93,11 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "UGX",
+  });
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -118,7 +123,7 @@ export default function OrdersPage() {
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
+      <h1 className="text-3xl font-bold mb-8 text-[#111827]">Your Orders</h1>
       {orders.length === 0 ? (
         <p>You haven&apos;t made any orders yet.</p>
       ) : (
@@ -164,8 +169,8 @@ export default function OrdersPage() {
                     .map((item) => `${item.name} (${item.quantity})`)
                     .join(", ")}
                 </p>
-                <p className="font-bold mt-2">
-                  Total Price: {order.total_price.toLocaleString()} UGX
+                <p className="font-bold mt-2 text-[#111827]">
+                  Total Price: {currencyFormatter.format(order.total_price)}
                 </p>
                 <p className="text-sm text-gray-500 mt-2">
                   Ordered on: {new Date(order.created_at).toLocaleString()}
