@@ -63,6 +63,7 @@ export default function BookingSummaryPage() {
   const [selectedEats, setSelectedEats] = useState<Record<string, number>>({});
   const [color, setColor] = useState<string>("");
   const [loading, setLoading] = useState(false);
+
   const [user, setUser] = useState<any>({});
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
@@ -293,6 +294,7 @@ export default function BookingSummaryPage() {
     return seatsTotal + eatsTotal;
   };
 
+
   // const handlePaymentz = async () => {
   //   try {
   //     if (!user || !user.is_active) {
@@ -344,6 +346,7 @@ export default function BookingSummaryPage() {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+
       </div>
     );
   }

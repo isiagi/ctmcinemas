@@ -57,8 +57,10 @@ export default function MovieShowtimes({ movie }: any) {
 
       // Group showtimes by date
       const groupedShowtimes = rawData.reduce((acc: any, showtime: any) => {
+
         const { date, id, time, price, includes_3d_glasses, includes_popcorn } =
           showtime;
+
         const existingDate = acc.find((entry: any) => entry.date === date);
 
         if (existingDate) {
@@ -106,7 +108,9 @@ export default function MovieShowtimes({ movie }: any) {
   };
 
   const handleBookNow = (showtime: any) => {
+
     localStorage.setItem("show_id", showtime.id);
+
     router.push(
       `/movies/${movie?.id}/book?date=${selectedDay}&time=${showtime.time}`
     );
@@ -140,12 +144,14 @@ export default function MovieShowtimes({ movie }: any) {
             </span>
             <span>{movie.duration}</span>
             <span>{movie.rating}</span>
+
             <Button
               variant="ghost"
               size="sm"
               className="text-white bg-gray-900"
               onClick={() => setShowTrailer(true)}
             >
+
               <Play className="h-4 w-4 mr-2" />
               Watch Trailer
             </Button>
@@ -196,11 +202,7 @@ export default function MovieShowtimes({ movie }: any) {
           {/* Date Selection Buttons */}
           <div className="flex flex-wrap gap-2 mb-4">
             {showtimes.map((day) => (
-              <Button
-                key={day.date}
-                variant={selectedDay === day.date ? "default" : "outline"}
-                onClick={() => setSelectedDay(day.date)}
-              >
+              <Button key={day.date} variant={selectedDay === day.date ? "default" : "outline"} onClick={() => setSelectedDay(day.date)}>
                 {day.date}
               </Button>
             ))}
@@ -211,10 +213,12 @@ export default function MovieShowtimes({ movie }: any) {
           {selectedDayData?.showtimes?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {selectedDayData.showtimes.map((showtime: any, index: any) => (
+
                 <div
                   key={index}
                   className="p-4 border rounded-lg group bg-white hover:shadow-md transition-shadow"
                 >
+
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-lg font-semibold">
                       {showtime.time}
@@ -232,11 +236,13 @@ export default function MovieShowtimes({ movie }: any) {
                         <Popcorn className="h-4 w-4 ml-1" />
                       )}
                     </span>
+
                     <Button
                       className="group-hover:bg-blue-600 bg-blue-500 text-white"
                       size="sm"
                       onClick={() => handleBookNow(showtime)}
                     >
+
                       <Clock className="mr-2 h-4 w-4" /> Book Now
                     </Button>
                   </div>

@@ -72,6 +72,7 @@ export default function MoviesPage() {
                   <h2 className="text-2xl font-bold mb-2">{movie.title}</h2>
                   <p className="mb-6 text-lg">{movie.description}</p>
                   <div className="flex space-x-4">
+
                     <Button
                       variant="outline"
                       size="sm"
@@ -87,6 +88,7 @@ export default function MoviesPage() {
                       className="text-[#0f0f0f] border-white hover:bg-gray-900 hover:text-white"
                       onClick={() => handleViewShowtimes(movie.id)}
                     >
+
                       <Calendar className="mr-2 h-4 w-4" />
                       View Showtimes
                     </Button>
