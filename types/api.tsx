@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://cinema-vmbf.onrender.com/auth";
+const API_URL = "https://de8f-102-86-12-63.ngrok-free.app/auth";
 
 export const login = async (email: string, password: string) => {
   try {

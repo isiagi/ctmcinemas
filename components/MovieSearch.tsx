@@ -79,7 +79,7 @@ export default function MovieSearch({ setIsMobileMenuOpen }: any) {
   };
 
   const handleFindAndBook = () => {
-    setIsMobileMenuOpen(false);
+    // setIsMobileMenuOpen(false);
     if (selectedMovie) {
       const movieSlug = selectedMovie
         .toLowerCase()
