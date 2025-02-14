@@ -116,7 +116,9 @@ export default function BookingSummaryPage() {
 
       console.log("Sending payload:", payload);
 
+
       const response = await axiosInstance.post("orders/", payload, {
+
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
@@ -136,7 +138,9 @@ export default function BookingSummaryPage() {
           setPopupMessage(
             "Please complete the payment in the new window and wait for confirmation."
           );
+
           // startPaymentVerification(response.data.order.id);
+
         }
       } else {
         throw new Error("No payment redirect URL received");
@@ -153,6 +157,7 @@ export default function BookingSummaryPage() {
       setShowPaymentModal(false);
     }
   };
+
 
   // const startPaymentVerification = async (orderId: string) => {
   //   let attempts = 0;
@@ -189,6 +194,7 @@ export default function BookingSummaryPage() {
   //     }
   //   }, 5000);
   // };
+
 
   const getMovieDetails = async () => {
     try {
