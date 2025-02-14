@@ -41,14 +41,11 @@ export default function OrdersPage() {
         return;
       }
 
-      const response = await axiosInstance.get<{ data: Order[] }>(
-        "orders/orders/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axiosInstance.get<{ data: Order[] }>("orders/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setOrders(response.data || []);
       console.log(response.data);
@@ -69,7 +66,7 @@ export default function OrdersPage() {
         return;
       }
 
-      await axiosInstance.delete(`orders/orders/${orderId}/`, {
+      await axiosInstance.delete(`orders/${orderId}/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

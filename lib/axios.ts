@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://e38b-102-86-12-63.ngrok-free.app/",
+  baseURL: "https://cinema-vmbf.onrender.com/",
   headers: {
     "Content-Type": "application/json",
   },
