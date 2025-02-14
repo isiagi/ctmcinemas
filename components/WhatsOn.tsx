@@ -12,17 +12,21 @@ export function WhatsOn() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showAll, setShowAll] = useState(false);
   const [movies, setMovies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const displayedMovies = showAll ? movies : movies.slice(0, 6);
   const router = useRouter();
 
   const getMoviesFromAPI = async () => {
+    setLoading(true);
     await axiosInstance
       .get("movies/movies/")
       .then((response) => {
         setMovies(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         setMovies([]);
+        setLoading(false);
         console.error("No movies found because of: ", error);
       });
   };
@@ -37,6 +41,12 @@ export function WhatsOn() {
         <h2 className="text-3xl font-bold mb-8 text-center text-white">
           What&apos;s On
         </h2>
+
+        {loading && (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[450px] gap-4 p-4 mx-4 lg:mx-10">
           {displayedMovies.map((movie, index) => {

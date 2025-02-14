@@ -116,7 +116,9 @@ export default function BookingSummaryPage() {
 
       console.log("Sending payload:", payload);
 
-      const response = await axiosInstance.post("orders/orders/", payload, {
+
+      const response = await axiosInstance.post("orders/", payload, {
+
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
@@ -136,7 +138,9 @@ export default function BookingSummaryPage() {
           setPopupMessage(
             "Please complete the payment in the new window and wait for confirmation."
           );
-          startPaymentVerification(response.data.order.id);
+
+          // startPaymentVerification(response.data.order.id);
+
         }
       } else {
         throw new Error("No payment redirect URL received");
@@ -154,41 +158,43 @@ export default function BookingSummaryPage() {
     }
   };
 
-  const startPaymentVerification = async (orderId: string) => {
-    let attempts = 0;
-    const maxAttempts = 20; // Increased attempts due to manual verification
-    const interval = setInterval(async () => {
-      try {
-        const response = await axiosInstance.post(
-          `orders/orders/${orderId}/verify_order_payment/`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          }
-        );
 
-        if (response.data.status === "Payment verified") {
-          clearInterval(interval);
-          setColor("success");
-          setPopupMessage("Payment successful! Redirecting to orders...");
-          setTimeout(() => router.push("/orders"), 2000);
-        }
-      } catch (error: any) {
-        console.error("Payment verification error:", error);
-        attempts++;
-        if (attempts >= maxAttempts) {
-          clearInterval(interval);
-          setColor("error");
-          setPopupMessage(
-            "Payment verification timed out. Please check your order status in the orders page."
-          );
-          setTimeout(() => router.push("/orders"), 3000);
-        }
-      }
-    }, 5000);
-  };
+  // const startPaymentVerification = async (orderId: string) => {
+  //   let attempts = 0;
+  //   const maxAttempts = 20; // Increased attempts due to manual verification
+  //   const interval = setInterval(async () => {
+  //     try {
+  //       const response = await axiosInstance.post(
+  //         `orders/orders/${orderId}/verify_order_payment/`,
+  //         {},
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${access_token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (response.data.status === "Payment verified") {
+  //         clearInterval(interval);
+  //         setColor("success");
+  //         setPopupMessage("Payment successful! Redirecting to orders...");
+  //         setTimeout(() => router.push("/orders"), 2000);
+  //       }
+  //     } catch (error: any) {
+  //       console.error("Payment verification error:", error);
+  //       attempts++;
+  //       if (attempts >= maxAttempts) {
+  //         clearInterval(interval);
+  //         setColor("error");
+  //         setPopupMessage(
+  //           "Payment verification timed out. Please check your order status in the orders page."
+  //         );
+  //         setTimeout(() => router.push("/orders"), 3000);
+  //       }
+  //     }
+  //   }, 5000);
+  // };
+
 
   const getMovieDetails = async () => {
     try {
@@ -294,7 +300,6 @@ export default function BookingSummaryPage() {
     return seatsTotal + eatsTotal;
   };
 
-
   // const handlePaymentz = async () => {
   //   try {
   //     if (!user || !user.is_active) {
@@ -346,7 +351,6 @@ export default function BookingSummaryPage() {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-
       </div>
     );
   }

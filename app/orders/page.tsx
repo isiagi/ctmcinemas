@@ -41,14 +41,11 @@ export default function OrdersPage() {
         return;
       }
 
-      const response = await axiosInstance.get<{ data: Order[] }>(
-        "orders/orders/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axiosInstance.get<{ data: Order[] }>("orders/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setOrders(response.data || []);
       console.log(response.data);
@@ -69,7 +66,7 @@ export default function OrdersPage() {
         return;
       }
 
-      await axiosInstance.delete(`orders/orders/${orderId}/`, {
+      await axiosInstance.delete(`orders/${orderId}/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -92,6 +89,11 @@ export default function OrdersPage() {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "UGX",
+  });
 
   if (isLoading) {
     return (
@@ -118,7 +120,7 @@ export default function OrdersPage() {
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
+      <h1 className="text-3xl font-bold mb-8 text-[#111827]">Your Orders</h1>
       {orders.length === 0 ? (
         <p>You haven&apos;t made any orders yet.</p>
       ) : (
@@ -164,8 +166,8 @@ export default function OrdersPage() {
                     .map((item) => `${item.name} (${item.quantity})`)
                     .join(", ")}
                 </p>
-                <p className="font-bold mt-2">
-                  Total Price: {order.total_price.toLocaleString()} UGX
+                <p className="font-bold mt-2 text-[#111827]">
+                  Total Price: {currencyFormatter.format(order.total_price)}
                 </p>
                 <p className="text-sm text-gray-500 mt-2">
                   Ordered on: {new Date(order.created_at).toLocaleString()}

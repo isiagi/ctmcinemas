@@ -107,7 +107,7 @@ export default function BookPage() {
     const movie_orders = () => {
       const show_id = localStorage.getItem("show_id");
       axiosInstance
-        .get(`orders/orders/booked-seats/${show_id}`)
+        .get(`orders/booked-seats/${show_id}`)
         .then((response) => {
           setLoadingSeats(false);
           setTakenSeats(response.data.booked_seats);

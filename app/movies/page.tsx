@@ -34,7 +34,7 @@ export default function MoviesPage() {
         // console.log(error);
       })
       .finally(() => {
-        // setLoading(false);
+        setLoading(false);
       });
   };
 
