@@ -21,7 +21,9 @@ const slides = [
       "https://res.cloudinary.com/isiagi/image/upload/v1738801024/m4st2smiuudiql3rjadq.jpg",
 
     alt: "Movie 2",
+
     title: "Captain America: Brave New World",
+
     description: "Fall in love with the most heartwarming story of the season.",
     route: "/movies/captain-america-brave-new-world",
   },
