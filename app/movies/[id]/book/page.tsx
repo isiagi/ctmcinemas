@@ -31,7 +31,6 @@ const generateSeats = (basePrice: number = 10.0) => {
             isAvailable: true,
 
             price: basePrice,
-
           });
         }
       }
@@ -86,6 +85,11 @@ export default function BookPage() {
     }
   };
 
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "UGX",
+  });
+
   useEffect(() => {
     const fetchMovieShowtimes = async () => {
       try {
@@ -93,8 +97,17 @@ export default function BookPage() {
           `showings/showings/movie/${movieId}/`
         );
 
-        const basePrice = response.data[0].price
-          ? Number.parseFloat(response.data[0].price)
+        console.log(response.data, "response.data");
+
+        // Filter with date and time
+        const filteredShowtimes = response.data.filter(
+          (showtime: any) => showtime.date === date && showtime.time === time
+        );
+
+        console.log(filteredShowtimes, "filteredShowtimes");
+
+        const basePrice = filteredShowtimes[0].price
+          ? Number.parseFloat(filteredShowtimes[0].price)
           : 10.0;
         const generatedSeats = generateSeats(basePrice);
         setSeats(generatedSeats);
@@ -148,10 +161,8 @@ export default function BookPage() {
 
   if (loadingSeats) {
     return (
-
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-
       </div>
     );
   }
@@ -222,7 +233,9 @@ export default function BookPage() {
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
         <div>
           <p>Selected Seats: {selectedSeats.join(", ")}</p>
-          <p className="font-bold">Total Price: {totalPrice.toFixed(2)} UGX</p>
+          <p className="font-bold">
+            Total Price: {currencyFormatter.format(totalPrice)}
+          </p>
         </div>
         <Button
           onClick={handleReserve}
