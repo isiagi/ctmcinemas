@@ -15,7 +15,7 @@ interface Seat {
   price: number;
 }
 
-const generateSeats = (basePrice: number = 10.0) => {
+const generateSeats = (basePrice = 10.0) => {
   const rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
   const seats: any = [];
 
@@ -68,6 +68,7 @@ export default function BookPage() {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [takenSeats, setTakenSeats] = useState<string[]>([]);
   const [loadingSeats, setLoadingSeats] = useState(true);
+  const [showPromoDetails, setShowPromoDetails] = useState(false);
 
   const movieId = params.id as string;
   const date = searchParams.get("date");
@@ -83,6 +84,12 @@ export default function BookPage() {
           : [...prev, seatId]
       );
     }
+  };
+
+  const isWednesday = () => {
+    if (!date) return false;
+    const bookingDate = new Date(date);
+    return bookingDate.getDay() === 3; // 0 is Sunday, 3 is Wednesday
   };
 
   const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -169,6 +176,24 @@ export default function BookPage() {
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4">
+      {isWednesday() && (
+        <div
+          className="bg-yellow-300 text-black p-4 text-center rounded-lg mb-4 cursor-pointer"
+          onClick={() => setShowPromoDetails(!showPromoDetails)}
+          aria-expanded={showPromoDetails}
+        >
+          <p className="font-bold">
+            🎉 Buy 2 Seats, Get 1 Free - Today Only! 🎉
+          </p>
+          {showPromoDetails && (
+            <div className="mt-2 text-sm">
+              <p>Book any two seats and get the third one free!</p>
+              <p>This offer is valid only for today&apos;s bookings.</p>
+              <p>The discount will be applied automatically at checkout.</p>
+            </div>
+          )}
+        </div>
+      )}
       <h1 className="text-3xl font-bold mb-4">Select Your Seats</h1>
       <p className="mb-4">
         Movie: {movieId}, Date: {date}, Time: {time}

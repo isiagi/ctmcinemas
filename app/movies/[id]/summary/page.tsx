@@ -116,9 +116,7 @@ export default function BookingSummaryPage() {
 
       console.log("Sending payload:", payload);
 
-
       const response = await axiosInstance.post("orders/", payload, {
-
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
@@ -140,7 +138,6 @@ export default function BookingSummaryPage() {
           );
 
           // startPaymentVerification(response.data.order.id);
-
         }
       } else {
         throw new Error("No payment redirect URL received");
@@ -158,43 +155,38 @@ export default function BookingSummaryPage() {
     }
   };
 
+  const isWednesday = () => {
+    if (!date) return false;
+    const bookingDate = new Date(date);
+    return bookingDate.getDay() === 3; // 0 is Sunday, 3 is Wednesday
+  };
 
-  // const startPaymentVerification = async (orderId: string) => {
-  //   let attempts = 0;
-  //   const maxAttempts = 20; // Increased attempts due to manual verification
-  //   const interval = setInterval(async () => {
-  //     try {
-  //       const response = await axiosInstance.post(
-  //         `orders/orders/${orderId}/verify_order_payment/`,
-  //         {},
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${access_token}`,
-  //           },
-  //         }
-  //       );
+  const calculateFreeSeats = () => {
+    // Only calculate free seats if it's Wednesday
+    if (!isWednesday()) return 0;
+    // Calculate number of free seats (1 free for every 2 paid)
+    return Math.floor(seats.length / 3);
+  };
 
-  //       if (response.data.status === "Payment verified") {
-  //         clearInterval(interval);
-  //         setColor("success");
-  //         setPopupMessage("Payment successful! Redirecting to orders...");
-  //         setTimeout(() => router.push("/orders"), 2000);
-  //       }
-  //     } catch (error: any) {
-  //       console.error("Payment verification error:", error);
-  //       attempts++;
-  //       if (attempts >= maxAttempts) {
-  //         clearInterval(interval);
-  //         setColor("error");
-  //         setPopupMessage(
-  //           "Payment verification timed out. Please check your order status in the orders page."
-  //         );
-  //         setTimeout(() => router.push("/orders"), 3000);
-  //       }
-  //     }
-  //   }, 5000);
-  // };
+  const calculatePaidSeats = () => {
+    // Calculate number of seats customer pays for
+    const freeSeats = calculateFreeSeats();
+    return seats.length - freeSeats;
+  };
 
+  const calculateTotal = () => {
+    const paidSeats = calculatePaidSeats();
+    const seatsTotal = paidSeats * movieDetails.price;
+
+    const eatsTotal = Object.entries(selectedEats).reduce(
+      (total, [itemId, quantity]) => {
+        const item = eatsItems.find((i) => i.id === itemId);
+        return total + (item?.price || 0) * quantity;
+      },
+      0
+    );
+    return seatsTotal + eatsTotal;
+  };
 
   const getMovieDetails = async () => {
     try {
@@ -288,63 +280,16 @@ export default function BookingSummaryPage() {
     );
   };
 
-  const calculateTotal = () => {
-    const seatsTotal = seats.length * movieDetails.price;
-    const eatsTotal = Object.entries(selectedEats).reduce(
-      (total, [itemId, quantity]) => {
-        const item = eatsItems.find((i) => i.id === itemId);
-        return total + (item?.price || 0) * quantity;
-      },
-      0
-    );
-    return seatsTotal + eatsTotal;
-  };
-
-  // const handlePaymentz = async () => {
-  //   try {
-  //     if (!user || !user.is_active) {
-  //       setColor("success");
-  //       setPopupMessage("You need to sign in to make your payment.");
-  //       return;
-  //     }
-
-  //     const accessToken = localStorage.getItem("access_token");
-  //     if (!accessToken) {
-  //       setColor("error");
-  //       setPopupMessage("You are not authenticated. Please sign in again.");
-  //       return;
-  //     }
-
-  //     const payload = {
-  //       user: user.id,
-  //       total_price: calculateTotal(),
-  //       eats,
-  //       seats,
-  //       showing: movieDetails.showId,
-  //     };
-
-  //     await axiosInstance.post("orders/orders/", payload, {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       withCredentials: true,
-  //     });
-
-  //     setColor("success");
-  //     setLoading(false);
-  //     setPopupMessage("Order placed successfully!");
-  //     router.push("/orders");
-  //   } catch (error: any) {
-  //     setLoading(false);
-  //     console.error(
-  //       "Error creating order:",
-  //       error.response?.data || error.message
-  //     );
-  //     setColor("error");
-  //     setPopupMessage("An error occurred. Please try again.");
-  //     // alert(error.response?.data?.message || "An error occurred. Please try again.");
-  //   }
+  // const calculateTotal = () => {
+  //   const seatsTotal = seats.length * movieDetails.price;
+  //   const eatsTotal = Object.entries(selectedEats).reduce(
+  //     (total, [itemId, quantity]) => {
+  //       const item = eatsItems.find((i) => i.id === itemId);
+  //       return total + (item?.price || 0) * quantity;
+  //     },
+  //     0
+  //   );
+  //   return seatsTotal + eatsTotal;
   // };
 
   if (loader) {
@@ -358,6 +303,19 @@ export default function BookingSummaryPage() {
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-8">BOOKING SUMMARY</h1>
+
+      {isWednesday() && (
+        <div className="bg-blue-100 border-l-4 border-blue-500 p-4 mb-6">
+          <p className="text-blue-700">
+            <span className="font-bold">Wednesday Special Offer:</span> For
+            every 2 seats you book, get 1 seat FREE!
+            {calculateFreeSeats() > 0 &&
+              ` (${calculateFreeSeats()} Free ${
+                calculateFreeSeats() === 1 ? "Ticket" : "Tickets"
+              } Applied)`}
+          </p>
+        </div>
+      )}
 
       {/* Movie Details Section */}
       <div className="border-b py-4">
@@ -471,16 +429,49 @@ export default function BookingSummaryPage() {
       <div className="mt-8 bg-gray-50 p-6 rounded-lg">
         <h2 className="text-lg font-bold mb-4">ORDER SUMMARY</h2>
         <div className="space-y-2">
-          <div className="flex justify-between">
-            <span>Tickets ({seats.length})</span>
-            <span>
-              {(seats.length * movieDetails.price).toLocaleString()} UGX
-            </span>
-          </div>
+          {isWednesday() && calculateFreeSeats() > 0 ? (
+            <>
+              <div className="flex justify-between">
+                <span>Tickets ({seats.length})</span>
+                <div className="text-right">
+                  <span className="line-through text-gray-400 mr-2">
+                    {(seats.length * movieDetails.price).toLocaleString()} UGX
+                  </span>
+                  <span>
+                    {(
+                      calculatePaidSeats() * movieDetails.price
+                    ).toLocaleString()}{" "}
+                    UGX
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-between text-green-600">
+                <span>
+                  {calculateFreeSeats()} Free{" "}
+                  {calculateFreeSeats() === 1 ? "Ticket" : "Tickets"}
+                  (Wednesday Special: 1 free for every 2 paid)
+                </span>
+                <span>
+                  -
+                  {(calculateFreeSeats() * movieDetails.price).toLocaleString()}{" "}
+                  UGX
+                </span>
+              </div>
+            </>
+          ) : (
+            <div className="flex justify-between">
+              <span>Tickets ({seats.length})</span>
+              <span>
+                {(seats.length * movieDetails.price).toLocaleString()} UGX
+              </span>
+            </div>
+          )}
+
           <div className="flex justify-between">
             <span>{movieDetails.includes_3d_glasses ? "3D Glasses" : ""}</span>
             <span>Included</span>
           </div>
+
           {Object.entries(selectedEats).map(([itemId, quantity]) => {
             const item = eatsItems.find((i) => i.id === itemId);
             if (item && quantity > 0) {
@@ -495,11 +486,19 @@ export default function BookingSummaryPage() {
             }
             return null;
           })}
+
           <div className="border-t pt-2 mt-4">
             <div className="flex justify-between font-bold">
               <span>Total Amount</span>
               <span>{calculateTotal().toLocaleString()} UGX</span>
             </div>
+            {isWednesday() && calculateFreeSeats() > 0 && (
+              <p className="text-sm text-green-600 mt-1">
+                You saved{" "}
+                {(calculateFreeSeats() * movieDetails.price).toLocaleString()}{" "}
+                UGX with our Wednesday special offer!
+              </p>
+            )}
           </div>
         </div>
       </div>
