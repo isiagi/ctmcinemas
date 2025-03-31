@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
+import { useAuth, useUser } from "@clerk/nextjs";
 
 interface Order {
   id: string;
@@ -31,15 +32,26 @@ export default function OrdersPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchOrders = async () => {
-    try {
-      const token = localStorage.getItem("access_token");
+  // check is clerk signin
+  const { isSignedIn, isLoaded } = useUser();
+  const { getToken } = useAuth();
 
-      if (!token) {
-        setError("No authentication token found");
+  const fetchOrders = async () => {
+    // Check if authentication state is fully loaded
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      const token = await getToken();
+
+      if (!isSignedIn || !token) {
+        setError("Please sign in to view your orders");
         setIsLoading(false);
         return;
       }
+
+      console.log("Token:", token);
 
       const response = await axiosInstance.get<{ data: Order[] }>("orders/", {
         headers: {
@@ -48,10 +60,9 @@ export default function OrdersPage() {
       });
 
       setOrders(response.data || []);
-      console.log(response.data);
     } catch (err) {
-      setError("Failed to fetch orders");
       console.error(err);
+      setError("Failed to fetch orders");
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +70,7 @@ export default function OrdersPage() {
 
   const handleDeleteOrder = async (orderId: string) => {
     try {
-      const token = localStorage.getItem("access_token");
+      const token = await getToken(); // Use Clerk's getToken method
 
       if (!token) {
         setError("No authentication token found");
@@ -75,6 +86,7 @@ export default function OrdersPage() {
       fetchOrders();
     } catch (err) {
       console.error("Failed to delete order:", err);
+      setError("Failed to delete order");
     }
   };
 
@@ -87,8 +99,10 @@ export default function OrdersPage() {
   };
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    if (isLoaded) {
+      fetchOrders();
+    }
+  }, [isLoaded]);
 
   const currencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -105,14 +119,16 @@ export default function OrdersPage() {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex flex-col items-center justify-center min-h-[80vh] bg-gray-100">
         <h1 className="text-2xl font-bold mb-4">
           {error === "No authentication token found"
             ? "Please log in to view your orders"
-            : "Failed to load orders"}
+            : error}
         </h1>
         <Link href="/login">
-          <Button>Log In</Button>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Login
+          </button>
         </Link>
       </div>
     );

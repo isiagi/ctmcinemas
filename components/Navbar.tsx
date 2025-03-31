@@ -10,6 +10,7 @@ import AuthModal from "./signinup";
 import PopupMessage from "./popup";
 import axiosInstance from "@/lib/axios";
 import axios from "axios";
+import UserButton from "./user-button";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -180,14 +181,7 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-white hover:bg-white text-blue-800"
-                onClick={() => setOpenUp(true)}
-              >
-                Sign In
-              </Button>
+              <UserButton />
             )}
           </div>
           <div className="-mr-2 flex md:hidden">
@@ -256,14 +250,7 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full text-black border-white hover:bg-white hover:text-gray-800"
-                  onClick={() => setOpenUp(true)}
-                >
-                  Sign In
-                </Button>
+                <UserButton />
               )}
             </div>
           </div>
