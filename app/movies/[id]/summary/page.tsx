@@ -137,6 +137,7 @@ export default function BookingSummaryPage() {
             "Please complete the payment in the new window and wait for confirmation."
           );
 
+
           // Store the order ID in localStorage to check its status later
           localStorage.setItem("pendingOrderId", response.data.order.id);
 
@@ -175,6 +176,7 @@ export default function BookingSummaryPage() {
           setTimeout(() => {
             clearInterval(checkInterval);
           }, 120000);
+
         }
       } else {
         throw new Error("No payment redirect URL received");
@@ -205,6 +207,7 @@ export default function BookingSummaryPage() {
     return Math.floor(seats.length / 3);
   };
 
+
   const calculatePaidSeats = () => {
     // Calculate number of seats customer pays for
     const freeSeats = calculateFreeSeats();
@@ -214,6 +217,7 @@ export default function BookingSummaryPage() {
   const calculateTotal = () => {
     const paidSeats = calculatePaidSeats();
     const seatsTotal = paidSeats * movieDetails.price;
+
 
     const eatsTotal = Object.entries(selectedEats).reduce(
       (total, [itemId, quantity]) => {
