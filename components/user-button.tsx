@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useAuth, useUser, SignOutButton } from "@clerk/nextjs";
 import { LogOut } from "lucide-react";
 
@@ -17,7 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function UserButton() {
   const { isSignedIn } = useAuth();
   const { user } = useUser();
-  const router = useRouter();
+  // const router = useRouter();
 
   if (!isSignedIn) {
     return (
