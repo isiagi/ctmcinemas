@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
@@ -24,6 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+
+import { useAuth, useUser } from "@clerk/nextjs";
 
 interface EatsItem {
   id: string;
@@ -67,25 +70,20 @@ export default function BookingSummaryPage() {
   const [user, setUser] = useState<any>({});
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
-  const access_token = localStorage.getItem("access_token");
   const seats = searchParams.get("seats")?.split(",") || [];
   const date = searchParams.get("date");
   const time = searchParams.get("time");
   const movieId = params.id;
   const eats = searchParams.get("eats");
 
+  const { isSignedIn } = useUser();
+  const { getToken } = useAuth();
+
   const handlePayment = async () => {
     try {
-      if (!user || !user.is_active) {
+      if (!isSignedIn) {
         setColor("error");
         setPopupMessage("You need to sign in to make your payment.");
-        return;
-      }
-
-      const accessToken = localStorage.getItem("access_token");
-      if (!accessToken) {
-        setColor("error");
-        setPopupMessage("You are not authenticated. Please sign in again.");
         return;
       }
 
@@ -102,6 +100,7 @@ export default function BookingSummaryPage() {
   const handlePaymentComplete = async (paymentResponse: PaymentResponse) => {
     try {
       setLoading(true);
+      const token = await getToken();
 
       const payload = {
         total_price: calculateTotal(),
@@ -118,7 +117,7 @@ export default function BookingSummaryPage() {
 
       const response = await axiosInstance.post("orders/", payload, {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -131,13 +130,53 @@ export default function BookingSummaryPage() {
         window.open(response.data.payment.instructions.redirect, "_blank");
 
         // Start polling for payment verification
+        // Inside handlePaymentComplete
         if (response.data.order && response.data.order.id) {
           setColor("success");
           setPopupMessage(
             "Please complete the payment in the new window and wait for confirmation."
           );
 
-          // startPaymentVerification(response.data.order.id);
+
+          // Store the order ID in localStorage to check its status later
+          localStorage.setItem("pendingOrderId", response.data.order.id);
+
+          // setPopupMessage("");
+
+          // Check payment status periodically
+          const checkInterval = setInterval(async () => {
+            try {
+              const token = await getToken();
+              const orderStatus = await axiosInstance.get(
+                `orders/${response.data.order.id}/`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+
+              console.log("Order status:", orderStatus.data);
+
+              if (orderStatus.data.payment_status === "success") {
+                clearInterval(checkInterval);
+                setPopupMessage(
+                  "Payment successful. Redirecting to orders page."
+                );
+                setTimeout(() => {
+                  router.push("/orders");
+                }, 2000);
+              }
+            } catch (error) {
+              console.error("Error checking order status:", error);
+            }
+          }, 5000); // Check every 5 seconds
+
+          // Stop checking after 2 minutes (optional timeout)
+          setTimeout(() => {
+            clearInterval(checkInterval);
+          }, 120000);
+
         }
       } else {
         throw new Error("No payment redirect URL received");
@@ -168,6 +207,7 @@ export default function BookingSummaryPage() {
     return Math.floor(seats.length / 3);
   };
 
+
   const calculatePaidSeats = () => {
     // Calculate number of seats customer pays for
     const freeSeats = calculateFreeSeats();
@@ -177,6 +217,7 @@ export default function BookingSummaryPage() {
   const calculateTotal = () => {
     const paidSeats = calculatePaidSeats();
     const seatsTotal = paidSeats * movieDetails.price;
+
 
     const eatsTotal = Object.entries(selectedEats).reduce(
       (total, [itemId, quantity]) => {
@@ -232,7 +273,7 @@ export default function BookingSummaryPage() {
       maxBodyLength: Infinity,
       url: "https://cinema-vmbf.onrender.com/auth/profile/",
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ttytrewwrtrytuyudz`,
       },
     };
 
